@@ -1,0 +1,97 @@
+import { useSettingsStore } from '../store/useSettingsStore.js';
+import { DEFAULT_GRADIENT } from '../store/defaults.js';
+import { Modal } from './Modal.jsx';
+import { IconRefresh } from '@tabler/icons-react';
+
+const STOP_LABELS = ['Cenit', 'Cielo medio', 'Violeta', 'Rosa', 'Horizonte'];
+
+const PRESETS = [
+  {
+    name: 'Crepúsculo',
+    stops: ['#0a1230', '#1c2456', '#3a2a6b', '#a85a8c', '#ffb377']
+  },
+  {
+    name: 'Aurora',
+    stops: ['#06121f', '#0e3a44', '#117a5a', '#a4d490', '#fff0a8']
+  },
+  {
+    name: 'Medianoche',
+    stops: ['#03050f', '#0a132e', '#1d1c4d', '#332a64', '#5b3a78']
+  },
+  {
+    name: 'Amanecer',
+    stops: ['#1a1748', '#5e2e72', '#c45a7a', '#ff9b6e', '#ffe1b3']
+  },
+  {
+    name: 'Cosmos',
+    stops: ['#020108', '#0d0828', '#3a0d4f', '#6b1f6b', '#d44a8e']
+  }
+];
+
+function previewStyle(stops) {
+  const positions = [0, 35, 65, 92, 100];
+  const parts = stops.map((c, i) => `${c} ${positions[i]}%`);
+  return { background: `linear-gradient(180deg, ${parts.join(', ')})` };
+}
+
+export function SkySettings({ open, onClose }) {
+  const stops = useSettingsStore((s) => s.gradientStops) ?? DEFAULT_GRADIENT;
+  const setStop = useSettingsStore((s) => s.setGradientStop);
+  const setStops = useSettingsStore((s) => s.setGradientStops);
+  const reset = useSettingsStore((s) => s.resetGradient);
+
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      title="Personaliza el cielo"
+      subtitle="Cinco paradas, de cenit a horizonte."
+      width={560}
+      footer={
+        <>
+          <button className="btn" onClick={reset}>
+            <IconRefresh size={14} stroke={1.8} />
+            <span>Restaurar por defecto</span>
+          </button>
+          <div style={{ flex: 1 }} />
+          <button className="btn btn--solid" onClick={onClose}>Hecho</button>
+        </>
+      }
+    >
+      <div style={{ display: 'flex', gap: 18 }}>
+        <div className="sky-preview" style={previewStyle(stops)} aria-hidden />
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {stops.map((color, i) => (
+            <label key={i} className="color-row">
+              <span className="color-row__label">{STOP_LABELS[i]}</span>
+              <span className="color-row__hex">{color.toUpperCase()}</span>
+              <input
+                type="color"
+                value={color}
+                onChange={(e) => setStop(i, e.target.value)}
+                aria-label={STOP_LABELS[i]}
+              />
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ marginTop: 22 }}>
+        <div className="label" style={{ marginBottom: 10 }}>Presets</div>
+        <div className="presets">
+          {PRESETS.map((p) => (
+            <button
+              key={p.name}
+              className="preset"
+              onClick={() => setStops(p.stops)}
+              title={p.name}
+            >
+              <span className="preset__swatch" style={previewStyle(p.stops)} />
+              <span className="preset__name">{p.name}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </Modal>
+  );
+}
