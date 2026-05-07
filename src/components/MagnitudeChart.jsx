@@ -7,6 +7,7 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from 'recharts';
+import { useTranslation } from '../i18n.jsx';
 
 const RANGES = [
   { label: '1–2', min: 1, max: 2 },
@@ -30,7 +31,9 @@ function bucketize(features) {
 }
 
 export function MagnitudeChart({ features }) {
+  const { t } = useTranslation();
   const data = bucketize(features);
+  const unit = t('earthquakes.chartTooltipUnit');
   return (
     <ResponsiveContainer width="100%" height={220}>
       <BarChart data={data} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
@@ -70,7 +73,7 @@ export function MagnitudeChart({ features }) {
           }}
           labelStyle={{ color: 'var(--text-1)' }}
           itemStyle={{ color: 'var(--text-2)' }}
-          formatter={(value) => [value, 'events']}
+          formatter={(value) => [value, unit]}
         />
         <Bar dataKey="count" fill="url(#mag-gradient)" radius={[6, 6, 0, 0]} />
       </BarChart>

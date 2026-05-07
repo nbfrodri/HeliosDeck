@@ -10,6 +10,7 @@ import {
   IconMapPin,
 } from "@tabler/icons-react";
 import { formatHM, tzShortLabel } from "../../lib/time.js";
+import { useTranslation } from "../../i18n.jsx";
 
 function fmtDuration(ms) {
   if (!ms || isNaN(ms) || ms < 0) return "—";
@@ -49,7 +50,7 @@ function SunArcMoonShadow({ cx, cy, r, phase }) {
   return <path d={path} fill="rgba(20, 22, 50, 0.78)" />;
 }
 
-function SunArc({ now, sunrise, sunset, solarNoon, moonRise, moonSet, moonPhase, tz }) {
+function SunArc({ now, sunrise, sunset, solarNoon, moonRise, moonSet, moonPhase, tz, locale }) {
   const W = 240;
   const H = 132; // viewBox tall enough for labels under horizon
   const cx = W / 2;
@@ -176,7 +177,7 @@ function SunArc({ now, sunrise, sunset, solarNoon, moonRise, moonSet, moonPhase,
         fontWeight="500"
         letterSpacing="0.1em"
       >
-        {formatHM(sunrise, tz).toUpperCase()}
+        {formatHM(sunrise, tz, locale).toUpperCase()}
       </text>
       <text
         x={cx}
@@ -188,7 +189,7 @@ function SunArc({ now, sunrise, sunset, solarNoon, moonRise, moonSet, moonPhase,
         fontWeight="500"
         letterSpacing="0.1em"
       >
-        {formatHM(solarNoon, tz).toUpperCase()}
+        {formatHM(solarNoon, tz, locale).toUpperCase()}
       </text>
       <text
         x={cx + r}
@@ -200,7 +201,7 @@ function SunArc({ now, sunrise, sunset, solarNoon, moonRise, moonSet, moonPhase,
         fontWeight="500"
         letterSpacing="0.1em"
       >
-        {formatHM(sunset, tz).toUpperCase()}
+        {formatHM(sunset, tz, locale).toUpperCase()}
       </text>
     </svg>
   );
@@ -220,6 +221,7 @@ function MiniRow({ Icon, color, label, value }) {
 
 export function SunTimesWidget({ location }) {
   const [now, setNow] = useState(() => new Date());
+  const { t, locale } = useTranslation();
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 60 * 1000);
     return () => clearInterval(id);
@@ -229,7 +231,7 @@ export function SunTimesWidget({ location }) {
     return (
       <div className="empty">
         <IconMapPinOff size={28} stroke={1.5} />
-        <div>Configura tu ubicación para ver salida y puesta.</div>
+        <div>{t('widget.sunTimes.noLocation')}</div>
       </div>
     );
   }
@@ -269,19 +271,20 @@ export function SunTimesWidget({ location }) {
           moonSet={moonTimes.set}
           moonPhase={moonIll.phase}
           tz={tz}
+          locale={locale}
         />
       </div>
 
       <div className="suntimes__banner">
         <div className="suntimes__banner-block">
-          <span className="label">Duración del día</span>
+          <span className="label">{t('widget.sunTimes.dayLength')}</span>
           <span className="suntimes__banner-value">{fmtDuration(dayLengthMs)}</span>
         </div>
         {deltaText && (
           <span
             className={`suntimes__banner-delta ${deltaUp ? "suntimes__banner-delta--up" : "suntimes__banner-delta--down"}`}
           >
-            {deltaText} vs ayer
+            {deltaText} {t('widget.sunTimes.vsYesterday')}
           </span>
         )}
       </div>
@@ -290,32 +293,32 @@ export function SunTimesWidget({ location }) {
         <MiniRow
           Icon={IconSunrise}
           color="#ffb377"
-          label="Aurora"
-          value={formatHM(times.dawn, tz)}
+          label={t('widget.sunTimes.dawn')}
+          value={formatHM(times.dawn, tz, locale)}
         />
         <MiniRow
           Icon={IconSunFilled}
           color="#ffd166"
-          label="Hora dorada"
-          value={`${formatHM(times.goldenHourEnd, tz)} · ${formatHM(times.goldenHour, tz)}`}
+          label={t('widget.sunTimes.goldenHour')}
+          value={`${formatHM(times.goldenHourEnd, tz, locale)} · ${formatHM(times.goldenHour, tz, locale)}`}
         />
         <MiniRow
           Icon={IconSunset}
           color="#ff8e57"
-          label="Crepúsculo"
-          value={formatHM(times.dusk, tz)}
+          label={t('widget.sunTimes.dusk')}
+          value={formatHM(times.dusk, tz, locale)}
         />
         <MiniRow
           Icon={IconMoonStars}
           color="#9bb8ff"
-          label="Salida luna"
-          value={formatHM(moonTimes.rise, tz)}
+          label={t('widget.sunTimes.moonRise')}
+          value={formatHM(moonTimes.rise, tz, locale)}
         />
         <MiniRow
           Icon={IconMoon}
           color="#7c89c8"
-          label="Puesta luna"
-          value={formatHM(moonTimes.set, tz)}
+          label={t('widget.sunTimes.moonSet')}
+          value={formatHM(moonTimes.set, tz, locale)}
         />
       </div>
     </div>

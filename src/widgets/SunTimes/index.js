@@ -3,8 +3,8 @@ import { SunTimesWidget } from './SunTimesWidget.jsx';
 
 export const SunTimesDescriptor = {
   type: 'sun-times',
-  name: 'Sol y luna',
-  description: 'Trayectoria diurna del sol, amanecer, atardecer y horarios lunares.',
+  nameKey: 'widget.sunTimes.name',
+  descriptionKey: 'widget.sunTimes.description',
   Icon: IconSunset2,
   defaultSize: { w: 5, h: 6 },
   minSize: { w: 4, h: 5 },

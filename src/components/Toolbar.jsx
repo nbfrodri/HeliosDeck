@@ -16,6 +16,7 @@ import { LocationSearch } from './LocationSearch.jsx';
 import { SkySettings } from './SkySettings.jsx';
 import { ConfirmDialog } from './ConfirmDialog.jsx';
 import { UserMenu } from './UserMenu.jsx';
+import { useTranslation } from '../i18n.jsx';
 
 export function Toolbar() {
   const editMode = useDeckStore((s) => s.editMode);
@@ -24,6 +25,7 @@ export function Toolbar() {
   const resetDeck = useDeckStore((s) => s.reset);
   const location = useSettingsStore((s) => s.location);
   const requestGeolocation = useSettingsStore((s) => s.requestGeolocation);
+  const { t } = useTranslation();
 
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchAnchor, setSearchAnchor] = useState(null);
@@ -44,7 +46,7 @@ export function Toolbar() {
     try {
       await requestGeolocation();
     } catch {
-      window.alert('No se pudo obtener la ubicación.');
+      window.alert(t('toolbar.gpsFailed'));
     } finally {
       setGpsBusy(false);
     }
@@ -57,48 +59,48 @@ export function Toolbar() {
           <Brand />
         </Link>
         <NavLink to="/earthquakes" className="toolbar__nav-link">
-          Earthquakes
+          {t('nav.earthquakes')}
         </NavLink>
         <NavLink to="/map" className="toolbar__nav-link">
-          Map
+          {t('nav.map')}
         </NavLink>
         <div className="toolbar__divider" />
         <button
           ref={locationBtnRef}
           className="btn btn--location"
           onClick={openSearch}
-          title="Cambiar ubicación"
+          title={t('toolbar.changeLocation')}
         >
           <IconMapPin size={14} stroke={1.8} />
-          <span>{location?.label ?? 'Sin ubicación'}</span>
+          <span>{location?.label ?? t('toolbar.noLocation')}</span>
         </button>
-        <button className="btn btn--icon" onClick={onGps} disabled={gpsBusy} title="Usar mi GPS">
+        <button className="btn btn--icon" onClick={onGps} disabled={gpsBusy} title={t('toolbar.useGps')}>
           <IconCurrentLocation size={14} stroke={1.8} />
         </button>
         <div className="toolbar__divider" />
-        <button className="btn btn--icon" onClick={() => setSkyOpen(true)} title="Personalizar cielo">
+        <button className="btn btn--icon" onClick={() => setSkyOpen(true)} title={t('toolbar.customizeSky')}>
           <IconPalette size={14} stroke={1.8} />
         </button>
         <div className="toolbar__spacer" />
         <button className="btn" onClick={togglePicker}>
           <IconPlus size={14} stroke={1.9} />
-          <span>Añadir widget</span>
+          <span>{t('toolbar.addWidget')}</span>
         </button>
         <button
           className={`btn ${editMode ? 'btn--solid' : ''}`}
           onClick={toggleEditMode}
         >
           {editMode ? <IconCheck size={14} stroke={2.2} /> : <IconPencil size={14} stroke={1.8} />}
-          <span>{editMode ? 'Hecho' : 'Editar'}</span>
+          <span>{editMode ? t('toolbar.done') : t('toolbar.edit')}</span>
         </button>
         {editMode && (
           <button
             className="btn btn--danger"
             onClick={() => setConfirmOpen(true)}
-            title="Eliminar todos los widgets"
+            title={t('toolbar.removeAllTooltip')}
           >
             <IconTrash size={14} stroke={1.8} />
-            <span>Reset</span>
+            <span>{t('toolbar.reset')}</span>
           </button>
         )}
         <div className="toolbar__divider" />
@@ -113,10 +115,10 @@ export function Toolbar() {
       <SkySettings open={skyOpen} onClose={() => setSkyOpen(false)} />
       <ConfirmDialog
         open={confirmOpen}
-        title="¿Reset del escritorio?"
-        message="Se eliminarán todos los widgets y su disposición. Esta acción no se puede deshacer."
-        confirmLabel="Eliminar todo"
-        cancelLabel="Cancelar"
+        title={t('toolbar.resetConfirmTitle')}
+        message={t('toolbar.resetConfirmMessage')}
+        confirmLabel={t('toolbar.resetConfirmAction')}
+        cancelLabel={t('common.cancel')}
         destructive
         onCancel={() => setConfirmOpen(false)}
         onConfirm={() => {

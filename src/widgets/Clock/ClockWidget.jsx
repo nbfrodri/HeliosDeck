@@ -3,6 +3,7 @@ import SunCalc from 'suncalc';
 import { IconSunrise, IconSunset, IconWorld } from '@tabler/icons-react';
 import { useDeckStore } from '../../store/useDeckStore.js';
 import { timeParts, formatInZone, tzShortLabel } from '../../lib/time.js';
+import { useTranslation } from '../../i18n.jsx';
 
 function isoWeek(date, tz) {
   // Use date components in the target tz to compute week consistently with the displayed date.
@@ -66,6 +67,7 @@ function nextSolarEvent(now, location) {
 export function ClockWidget({ instance, settings, location }) {
   const [now, setNow] = useState(() => new Date());
   const updateSettings = useDeckStore((s) => s.updateSettings);
+  const { t, locale } = useTranslation();
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);
@@ -77,14 +79,14 @@ export function ClockWidget({ instance, settings, location }) {
   const is24h = format === '24h';
   const tz = location?.timezone || null;
 
-  const { hour, minute, second, dayPeriod: rawDayPeriod } = timeParts(now, tz, !is24h);
+  const { hour, minute, second, dayPeriod: rawDayPeriod } = timeParts(now, tz, !is24h, locale);
   // Strip non-letters from dayPeriod to get clean "am"/"pm" (es-ES gives "p. m.")
   const dayPeriod = rawDayPeriod ? rawDayPeriod.replace(/[^a-záéíóúñ]/gi, '') : null;
   const dateRaw = formatInZone(now, tz, {
     weekday: 'long',
     day: 'numeric',
     month: 'long'
-  });
+  }, locale);
   const date = dateRaw.charAt(0).toUpperCase() + dateRaw.slice(1);
   const week = isoWeek(now, tz);
   const doy = dayOfYear(now, tz);
@@ -113,7 +115,7 @@ export function ClockWidget({ instance, settings, location }) {
 
       <div className="clock__row">
         <div className="muted clock-date">{date}</div>
-        <div className="seg-toggle" role="group" aria-label="Formato horario">
+        <div className="seg-toggle" role="group" aria-label={t('widget.clock.format')}>
           <button
             className={`seg-toggle__btn ${is24h ? 'seg-toggle__btn--active' : ''}`}
             onClick={() => setFormat('24h')}
@@ -127,7 +129,7 @@ export function ClockWidget({ instance, settings, location }) {
 
       <div className="clock__meta">
         {location && (
-          <span className="clock__meta-item" title={tz ?? 'Zona horaria'}>
+          <span className="clock__meta-item" title={tz ?? ''}>
             <IconWorld size={11} stroke={1.7} />
             <span className="clock__meta-value" style={{ fontSize: 11 }}>
               {location.label}
@@ -136,11 +138,11 @@ export function ClockWidget({ instance, settings, location }) {
           </span>
         )}
         <span className="clock__meta-item">
-          <span className="label">SEM</span>
+          <span className="label">{t('widget.clock.weekShort')}</span>
           <span className="clock__meta-value">{week}</span>
         </span>
         <span className="clock__meta-item">
-          <span className="label">DÍA</span>
+          <span className="label">{t('widget.clock.dayOfYearShort')}</span>
           <span className="clock__meta-value">{doy}</span>
         </span>
         {next && countdown && (
@@ -148,7 +150,7 @@ export function ClockWidget({ instance, settings, location }) {
             {next.kind === 'sunrise'
               ? <IconSunrise size={12} stroke={1.8} color="#ffb377" />
               : <IconSunset size={12} stroke={1.8} color="#ff8e57" />}
-            <span className="clock__meta-value" style={{ fontSize: 11 }}>en {countdown}</span>
+            <span className="clock__meta-value" style={{ fontSize: 11 }}>{t('widget.clock.in')} {countdown}</span>
           </span>
         )}
       </div>

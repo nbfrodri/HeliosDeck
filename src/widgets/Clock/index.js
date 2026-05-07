@@ -3,8 +3,8 @@ import { ClockWidget } from './ClockWidget.jsx';
 
 export const ClockDescriptor = {
   type: 'clock',
-  name: 'Reloj',
-  description: 'Hora local con segundos.',
+  nameKey: 'widget.clock.name',
+  descriptionKey: 'widget.clock.description',
   Icon: IconClock,
   defaultSize: { w: 4, h: 3 },
   minSize: { w: 3, h: 2 },

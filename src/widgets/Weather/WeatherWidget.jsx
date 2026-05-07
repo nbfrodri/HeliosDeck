@@ -12,10 +12,10 @@ import {
 import { useWeather } from '../../hooks/useWeather.js';
 import {
   weatherCodeToIcon,
-  weatherCodeToLabel,
   weatherCodeToColor
 } from '../../lib/api/openMeteo.js';
 import { HourlyChart } from './HourlyChart.jsx';
+import { useTranslation } from '../../i18n.jsx';
 
 function fmtTime(iso) {
   if (!iso) return '—';
@@ -23,13 +23,13 @@ function fmtTime(iso) {
   return d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 }
 
-function uvLevel(uv) {
+function uvLevel(uv, t) {
   if (uv == null) return { label: '—', color: 'var(--text-3)' };
-  if (uv < 3) return { label: 'Bajo', color: '#8be0c8' };
-  if (uv < 6) return { label: 'Moderado', color: '#ffd166' };
-  if (uv < 8) return { label: 'Alto', color: '#ffb377' };
-  if (uv < 11) return { label: 'Muy alto', color: '#ff7a8a' };
-  return { label: 'Extremo', color: '#d34cff' };
+  if (uv < 3) return { label: t('widget.weather.uv.low'), color: '#8be0c8' };
+  if (uv < 6) return { label: t('widget.weather.uv.moderate'), color: '#ffd166' };
+  if (uv < 8) return { label: t('widget.weather.uv.high'), color: '#ffb377' };
+  if (uv < 11) return { label: t('widget.weather.uv.veryHigh'), color: '#ff7a8a' };
+  return { label: t('widget.weather.uv.extreme'), color: '#d34cff' };
 }
 
 function Stat({ Icon, label, value }) {
@@ -46,28 +46,29 @@ function Stat({ Icon, label, value }) {
 
 export function WeatherWidget({ location }) {
   const { data, isLoading, isError } = useWeather(location);
+  const { t } = useTranslation();
 
   if (!location) {
     return (
       <div className="empty">
         <IconMapPinOff size={28} stroke={1.5} />
-        <div>Configura tu ubicación en la barra superior.</div>
+        <div>{t('widget.weather.noLocation')}</div>
       </div>
     );
   }
-  if (isLoading && !data) return <div className="empty">Cargando…</div>;
-  if (isError && !data) return <div className="empty">No se pudo cargar el tiempo.</div>;
+  if (isLoading && !data) return <div className="empty">{t('widget.weather.loading')}</div>;
+  if (isError && !data) return <div className="empty">{t('widget.weather.loadFailed')}</div>;
   if (!data) return null;
 
   const cur = data.current;
   const today = data.daily;
   const Icon = weatherCodeToIcon(cur.weather_code, !!cur.is_day);
   const tint = weatherCodeToColor(cur.weather_code, !!cur.is_day);
-  const label = weatherCodeToLabel(cur.weather_code);
+  const label = t(`widget.weather.codes.${cur.weather_code}`);
   const tMax = today?.temperature_2m_max?.[0];
   const tMin = today?.temperature_2m_min?.[0];
   const uv = today?.uv_index_max?.[0];
-  const uvInfo = uvLevel(uv);
+  const uvInfo = uvLevel(uv, t);
   const sunrise = today?.sunrise?.[0];
   const sunset = today?.sunset?.[0];
 
@@ -104,9 +105,9 @@ export function WeatherWidget({ location }) {
       </div>
 
       <div className="weather__stats">
-        <Stat Icon={IconTemperature} label="Sensación" value={`${Math.round(cur.apparent_temperature)}°`} />
-        <Stat Icon={IconDroplet} label="Humedad" value={`${cur.relative_humidity_2m}%`} />
-        <Stat Icon={IconWind} label="Viento" value={`${Math.round(cur.wind_speed_10m)} km/h`} />
+        <Stat Icon={IconTemperature} label={t('widget.weather.feelsLike')} value={`${Math.round(cur.apparent_temperature)}°`} />
+        <Stat Icon={IconDroplet} label={t('widget.weather.humidity')} value={`${cur.relative_humidity_2m}%`} />
+        <Stat Icon={IconWind} label={t('widget.weather.wind')} value={`${Math.round(cur.wind_speed_10m)} km/h`} />
       </div>
 
       <div className="weather__sun">

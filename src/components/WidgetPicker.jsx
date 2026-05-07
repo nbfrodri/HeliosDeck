@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { useDeckStore } from '../store/useDeckStore.js';
 import { listAvailable } from '../widgets/registry.js';
+import { useTranslation } from '../i18n.jsx';
 
 export function WidgetPicker() {
   const open = useDeckStore((s) => s.pickerOpen);
   const setOpen = useDeckStore((s) => s.setPickerOpen);
   const addWidget = useDeckStore((s) => s.addWidget);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!open) return;
@@ -23,11 +25,15 @@ export function WidgetPicker() {
       <div className="picker" onClick={(e) => e.stopPropagation()}>
         <div className="picker__header">
           <div>
-            <div className="picker__title">Añadir widget</div>
-            <div className="picker__sub">{items.length} disponibles</div>
+            <div className="picker__title">{t('widgetPicker.title')}</div>
+            <div className="picker__sub">
+              {t('widgetPicker.subtitle', { n: items.length })}
+            </div>
           </div>
           <div style={{ flex: 1 }} />
-          <button className="btn" onClick={() => setOpen(false)}>Cerrar</button>
+          <button className="btn" onClick={() => setOpen(false)}>
+            {t('widgetPicker.close')}
+          </button>
         </div>
         <div className="picker__grid">
           {items.map((it) => (
@@ -39,8 +45,8 @@ export function WidgetPicker() {
               <div className="picker__item-icon">
                 {it.Icon && <it.Icon size={22} stroke={1.6} />}
               </div>
-              <div className="picker__item-name">{it.name}</div>
-              <div className="picker__item-desc">{it.description}</div>
+              <div className="picker__item-name">{t(it.nameKey)}</div>
+              <div className="picker__item-desc">{t(it.descriptionKey)}</div>
             </button>
           ))}
         </div>

@@ -1,12 +1,17 @@
-function relativeTime(ms) {
-  const diff = Date.now() - ms;
-  if (diff < 60_000) return 'just now';
-  const min = Math.floor(diff / 60_000);
-  if (min < 60) return `${min} min ago`;
-  const h = Math.floor(min / 60);
-  if (h < 24) return `${h}h ago`;
-  const d = Math.floor(h / 24);
-  return `${d}d ago`;
+import { useTranslation } from '../i18n.jsx';
+
+function useRelativeTime() {
+  const { t } = useTranslation();
+  return (ms) => {
+    const diff = Date.now() - ms;
+    if (diff < 60_000) return t('earthquakes.time.justNow');
+    const min = Math.floor(diff / 60_000);
+    if (min < 60) return t('earthquakes.time.minAgo', { n: min });
+    const h = Math.floor(min / 60);
+    if (h < 24) return t('earthquakes.time.hourAgo', { n: h });
+    const d = Math.floor(h / 24);
+    return t('earthquakes.time.dayAgo', { n: d });
+  };
 }
 
 function magClass(m) {
@@ -34,14 +39,16 @@ export function MagBadge({ value }) {
 }
 
 export function EarthquakeList({ features }) {
+  const { t } = useTranslation();
+  const relTime = useRelativeTime();
   if (!features.length) {
-    return <div className="quake-list__empty">No events match these filters.</div>;
+    return <div className="quake-list__empty">{t('earthquakes.noEventsFiltered')}</div>;
   }
   return (
     <ul className="quake-list">
       {features.map((f) => {
         const m = f.properties?.mag;
-        const place = f.properties?.place ?? 'Unknown location';
+        const place = f.properties?.place ?? t('earthquakes.unknownLocation');
         const time = f.properties?.time;
         const depth = f.geometry?.coordinates?.[2];
         const url = f.properties?.url;
@@ -59,8 +66,8 @@ export function EarthquakeList({ features }) {
                 )}
               </div>
               <div className="quake-list__meta">
-                {time ? relativeTime(time) : 'unknown time'}
-                {depth != null && ` · ${Math.round(depth)} km depth`}
+                {time ? relTime(time) : t('earthquakes.unknownTime')}
+                {depth != null && ` · ${Math.round(depth)} ${t('earthquakes.kmDepth')}`}
               </div>
             </div>
           </li>

@@ -2,11 +2,13 @@ import { IconX } from '@tabler/icons-react';
 import { useDeckStore } from '../store/useDeckStore.js';
 import { useSettingsStore } from '../store/useSettingsStore.js';
 import { getDescriptor } from '../widgets/registry.js';
+import { useTranslation } from '../i18n.jsx';
 
 export function DeckWidget({ instance }) {
   const editMode = useDeckStore((s) => s.editMode);
   const removeWidget = useDeckStore((s) => s.removeWidget);
   const location = useSettingsStore((s) => s.location);
+  const { t } = useTranslation();
 
   const desc = getDescriptor(instance.type);
   if (!desc) return null;
@@ -19,10 +21,10 @@ export function DeckWidget({ instance }) {
         <span className="widget__icon">
           {desc.Icon && <desc.Icon size={13} stroke={1.8} />}
         </span>
-        <span className="widget__title">{desc.name}</span>
+        <span className="widget__title">{t(desc.nameKey)}</span>
         <button
           className="widget__close"
-          aria-label="Eliminar widget"
+          aria-label={t('widget.removeAria')}
           onPointerDown={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
           onClick={(e) => {

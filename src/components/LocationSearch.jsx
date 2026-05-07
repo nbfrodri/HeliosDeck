@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { IconSearch, IconLoader2 } from '@tabler/icons-react';
 import { useSettingsStore } from '../store/useSettingsStore.js';
+import { useTranslation } from '../i18n.jsx';
 
 // Convert country_code (ISO 3166-1 alpha-2) into the corresponding flag emoji
 function flagEmoji(cc) {
@@ -16,6 +17,7 @@ export function LocationSearch({ open, anchorRect, onClose }) {
   const [loading, setLoading] = useState(false);
   const [highlight, setHighlight] = useState(0);
   const setLocation = useSettingsStore((s) => s.setLocation);
+  const { t, locale } = useTranslation();
 
   useEffect(() => {
     if (!open) return;
@@ -61,7 +63,7 @@ export function LocationSearch({ open, anchorRect, onClose }) {
     const t = setTimeout(async () => {
       try {
         const res = await fetch(
-          `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query.trim())}&count=6&language=es`
+          `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query.trim())}&count=6&language=${locale}`
         );
         const json = await res.json();
         if (cancelled) return;
@@ -109,7 +111,7 @@ export function LocationSearch({ open, anchorRect, onClose }) {
           <input
             ref={inputRef}
             type="text"
-            placeholder="Buscar ciudad…"
+            placeholder={t('locationSearch.placeholder')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -117,12 +119,10 @@ export function LocationSearch({ open, anchorRect, onClose }) {
         </div>
         <div className="popover__list">
           {!query.trim() && (
-            <div className="popover__hint">
-              Búsqueda global. Escribe cualquier ciudad del mundo.
-            </div>
+            <div className="popover__hint">{t('locationSearch.hint')}</div>
           )}
           {query.trim() && !loading && results.length === 0 && (
-            <div className="popover__hint">Sin resultados.</div>
+            <div className="popover__hint">{t('locationSearch.noResults')}</div>
           )}
           {results.map((r, i) => (
             <button

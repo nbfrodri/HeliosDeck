@@ -4,67 +4,30 @@ import { useSettingsStore } from '../store/useSettingsStore.js';
 import { DEFAULT_GRADIENT } from '../store/defaults.js';
 import { Modal } from './Modal.jsx';
 import { IconRefresh } from '@tabler/icons-react';
-import { FLUID_PRESETS, TUNABLE_KEYS, getPresetConfig } from './SkyFluidShader.jsx';
+import { FLUID_PRESETS, TUNABLE_KEYS, getPresetConfig } from './skyFluidConfig.js';
+import { useTranslation } from '../i18n.jsx';
 
 const SLIDERS = [
-  { key: 'uSpeed',     label: 'Speed',      min: 0,    max: 1,   step: 0.02, format: (v) => v.toFixed(2) },
-  { key: 'uStrength',  label: 'Intensity',  min: 0,    max: 8,   step: 0.1,  format: (v) => v.toFixed(1) },
-  { key: 'uFrequency', label: 'Frequency',  min: 1,    max: 10,  step: 0.1,  format: (v) => v.toFixed(1) },
-  { key: 'uDensity',   label: 'Density',    min: 0.5,  max: 3,   step: 0.1,  format: (v) => v.toFixed(1) },
-  { key: 'brightness', label: 'Brightness', min: 0.5,  max: 2,   step: 0.05, format: (v) => v.toFixed(2) },
+  { key: 'uSpeed',     min: 0,    max: 1,   step: 0.02, format: (v) => v.toFixed(2) },
+  { key: 'uStrength',  min: 0,    max: 8,   step: 0.1,  format: (v) => v.toFixed(1) },
+  { key: 'uFrequency', min: 1,    max: 10,  step: 0.1,  format: (v) => v.toFixed(1) },
+  { key: 'uDensity',   min: 0.5,  max: 3,   step: 0.1,  format: (v) => v.toFixed(1) },
+  { key: 'brightness', min: 0.5,  max: 2,   step: 0.05, format: (v) => v.toFixed(2) },
 ];
 
-const STOP_LABELS = ['Cenit', 'Cielo medio', 'Violeta', 'Rosa', 'Horizonte'];
-
 const PRESETS = [
-  {
-    name: 'Crepúsculo',
-    stops: ['#0a1230', '#1c2456', '#3a2a6b', '#a85a8c', '#ffb377']
-  },
-  {
-    name: 'Aurora',
-    stops: ['#06121f', '#0e3a44', '#117a5a', '#a4d490', '#fff0a8']
-  },
-  {
-    name: 'Medianoche',
-    stops: ['#03050f', '#0a132e', '#1d1c4d', '#332a64', '#5b3a78']
-  },
-  {
-    name: 'Amanecer',
-    stops: ['#1a1748', '#5e2e72', '#c45a7a', '#ff9b6e', '#ffe1b3']
-  },
-  {
-    name: 'Cosmos',
-    stops: ['#020108', '#0d0828', '#3a0d4f', '#6b1f6b', '#d44a8e']
-  },
-  {
-    name: 'Océano',
-    stops: ['#02050f', '#04162d', '#0a3d5b', '#0a8c92', '#aef0ff']
-  },
-  {
-    name: 'Bosque',
-    stops: ['#040a05', '#0a2010', '#13501f', '#3a8a3f', '#c2e885']
-  },
-  {
-    name: 'Volcán',
-    stops: ['#080403', '#1a0606', '#5a0d12', '#b8281f', '#ff7a3d']
-  },
-  {
-    name: 'Glaciar',
-    stops: ['#0c1626', '#1a2c45', '#3d5a7a', '#7a9bbf', '#dfeaf5']
-  },
-  {
-    name: 'Lavanda',
-    stops: ['#1a1430', '#3a2858', '#6b4a9b', '#b48ad6', '#f5d8e8']
-  },
-  {
-    name: 'Brasas',
-    stops: ['#0a0202', '#1f0606', '#4f0e0c', '#9c2a14', '#e87f3a']
-  },
-  {
-    name: 'Coral',
-    stops: ['#02141c', '#063042', '#0e7287', '#3dc8d4', '#ffd189']
-  }
+  { id: 'twilight',  stops: ['#0a1230', '#1c2456', '#3a2a6b', '#a85a8c', '#ffb377'] },
+  { id: 'aurora',    stops: ['#06121f', '#0e3a44', '#117a5a', '#a4d490', '#fff0a8'] },
+  { id: 'midnight',  stops: ['#03050f', '#0a132e', '#1d1c4d', '#332a64', '#5b3a78'] },
+  { id: 'dawn',      stops: ['#1a1748', '#5e2e72', '#c45a7a', '#ff9b6e', '#ffe1b3'] },
+  { id: 'cosmos',    stops: ['#020108', '#0d0828', '#3a0d4f', '#6b1f6b', '#d44a8e'] },
+  { id: 'ocean',     stops: ['#02050f', '#04162d', '#0a3d5b', '#0a8c92', '#aef0ff'] },
+  { id: 'forest',    stops: ['#040a05', '#0a2010', '#13501f', '#3a8a3f', '#c2e885'] },
+  { id: 'volcano',   stops: ['#080403', '#1a0606', '#5a0d12', '#b8281f', '#ff7a3d'] },
+  { id: 'glacier',   stops: ['#0c1626', '#1a2c45', '#3d5a7a', '#7a9bbf', '#dfeaf5'] },
+  { id: 'lavender',  stops: ['#1a1430', '#3a2858', '#6b4a9b', '#b48ad6', '#f5d8e8'] },
+  { id: 'embers',    stops: ['#0a0202', '#1f0606', '#4f0e0c', '#9c2a14', '#e87f3a'] },
+  { id: 'coral',     stops: ['#02141c', '#063042', '#0e7287', '#3dc8d4', '#ffd189'] }
 ];
 
 function previewStyle(stops) {
@@ -84,6 +47,7 @@ export function SkySettings({ open, onClose }) {
   const setSkyFluidPreset = useSettingsStore((s) => s.setSkyFluidPreset);
   const setSkyFluidCustom = useSettingsStore((s) => s.setSkyFluidCustom);
   const reset = useSettingsStore((s) => s.resetGradient);
+  const { t } = useTranslation();
 
   const [activeIndex, setActiveIndex] = useState(0);
   const activeColor = stops[activeIndex] ?? '#000000';
@@ -109,17 +73,17 @@ export function SkySettings({ open, onClose }) {
     <Modal
       open={open}
       onClose={onClose}
-      title="Personaliza el cielo"
-      subtitle="Cinco paradas, de cenit a horizonte."
+      title={t('sky.title')}
+      subtitle={t('sky.subtitle')}
       width={620}
       footer={
         <>
           <button className="btn" onClick={reset}>
             <IconRefresh size={14} stroke={1.8} />
-            <span>Restaurar por defecto</span>
+            <span>{t('sky.restoreDefault')}</span>
           </button>
           <div style={{ flex: 1 }} />
-          <button className="btn btn--solid" onClick={onClose}>Hecho</button>
+          <button className="btn btn--solid" onClick={onClose}>{t('sky.done')}</button>
         </>
       }
     >
@@ -137,7 +101,7 @@ export function SkySettings({ open, onClose }) {
           className={`sky-mode-toggle__btn${skyMode === 'static' ? ' sky-mode-toggle__btn--active' : ''}`}
           onClick={() => setSkyMode('static')}
         >
-          Static gradient
+          {t('sky.modeStatic')}
         </button>
         <button
           type="button"
@@ -146,7 +110,7 @@ export function SkySettings({ open, onClose }) {
           className={`sky-mode-toggle__btn${skyMode === 'fluid' ? ' sky-mode-toggle__btn--active' : ''}`}
           onClick={() => setSkyMode('fluid')}
         >
-          Fluid · animated
+          {t('sky.modeFluid')}
         </button>
       </div>
 
@@ -166,7 +130,7 @@ export function SkySettings({ open, onClose }) {
                 style={{ background: color }}
                 aria-hidden
               />
-              <span className="color-row__label">{STOP_LABELS[i]}</span>
+              <span className="color-row__label">{t(`sky.stops.${i}`)}</span>
               <span className="color-row__hex">{color.toUpperCase()}</span>
             </button>
           ))}
@@ -180,7 +144,7 @@ export function SkySettings({ open, onClose }) {
         />
         <div className="color-picker-pane__meta">
           <div className="color-picker-pane__caption">
-            Editando <strong>{STOP_LABELS[activeIndex]}</strong>
+            {t('sky.editing')} <strong>{t(`sky.stops.${activeIndex}`)}</strong>
           </div>
           <label className="hex-input">
             <span className="hex-input__hash">#</span>
@@ -197,7 +161,7 @@ export function SkySettings({ open, onClose }) {
       {skyMode === 'fluid' && (
         <>
           <div className="sky-presets-section">
-            <div className="sky-presets-section__heading">Animation preset</div>
+            <div className="sky-presets-section__heading">{t('sky.animationPreset')}</div>
             <div className="fluid-presets">
               {FLUID_PRESETS.map((p) => (
                 <button
@@ -215,14 +179,14 @@ export function SkySettings({ open, onClose }) {
 
           <div className="sky-presets-section">
             <div className="sky-presets-section__heading sky-presets-section__heading--row">
-              <span>Fine tune</span>
+              <span>{t('sky.fineTune')}</span>
               <button
                 type="button"
                 className="sky-tune__reset"
                 onClick={resetCustomToPreset}
-                title="Reset to preset defaults"
+                title={t('sky.tuneReset')}
               >
-                Reset
+                {t('sky.tuneReset')}
               </button>
             </div>
             <div className="sky-tune">
@@ -231,7 +195,7 @@ export function SkySettings({ open, onClose }) {
                 return (
                   <label key={s.key} className="sky-tune__row">
                     <div className="sky-tune__head">
-                      <span className="sky-tune__label">{s.label}</span>
+                      <span className="sky-tune__label">{t(`sky.sliders.${s.key}`)}</span>
                       <span className="sky-tune__value">{s.format(value)}</span>
                     </div>
                     <input
@@ -254,19 +218,22 @@ export function SkySettings({ open, onClose }) {
       )}
 
       <div className="sky-presets-section">
-        <div className="sky-presets-section__heading">Color presets</div>
+        <div className="sky-presets-section__heading">{t('sky.presets')}</div>
         <div className="presets">
-          {PRESETS.map((p) => (
-            <button
-              key={p.name}
-              className="preset"
-              onClick={() => setStops(p.stops)}
-              title={p.name}
-            >
-              <span className="preset__swatch" style={previewStyle(p.stops)} />
-              <span className="preset__name">{p.name}</span>
-            </button>
-          ))}
+          {PRESETS.map((p) => {
+            const name = t(`sky.colorPresets.${p.id}`);
+            return (
+              <button
+                key={p.id}
+                className="preset"
+                onClick={() => setStops(p.stops)}
+                title={name}
+              >
+                <span className="preset__swatch" style={previewStyle(p.stops)} />
+                <span className="preset__name">{name}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
     </Modal>

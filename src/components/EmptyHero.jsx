@@ -1,6 +1,7 @@
 import { IconArrowRight } from '@tabler/icons-react';
 import { useDeckStore } from '../store/useDeckStore.js';
 import { listAvailable } from '../widgets/registry.js';
+import { useTranslation } from '../i18n.jsx';
 
 function HeroIllustration() {
   return (
@@ -55,6 +56,7 @@ export function EmptyHero() {
   const togglePicker = useDeckStore((s) => s.togglePicker);
   const addWidget = useDeckStore((s) => s.addWidget);
   const items = listAvailable();
+  const { t } = useTranslation();
 
   const addAll = () => items.forEach((it) => addWidget(it.type));
 
@@ -64,19 +66,16 @@ export function EmptyHero() {
         <HeroIllustration />
       </div>
 
-      <h1 className="hero__title">Tu cielo, en miniatura.</h1>
-      <p className="hero__sub">
-        Compón tu escritorio con widgets de tiempo, sol, luna y cielo.
-        Arrástralos donde quieras, redimensiónalos, configúralos.
-      </p>
+      <h1 className="hero__title">{t('emptyHero.title')}</h1>
+      <p className="hero__sub">{t('emptyHero.description')}</p>
 
       <div className="hero__actions">
         <button className="btn btn--accent btn--lg" onClick={togglePicker}>
-          <span>Añadir tu primer widget</span>
+          <span>{t('emptyHero.addFirst')}</span>
           <IconArrowRight size={16} stroke={2} />
         </button>
         <button className="btn btn--ghost-lg" onClick={addAll}>
-          Empezar con los 4 por defecto
+          {t('emptyHero.addAll')}
         </button>
       </div>
 
@@ -84,7 +83,7 @@ export function EmptyHero() {
         {items.map((it) => (
           <div key={it.type} className="hero__chip">
             {it.Icon && <it.Icon size={13} stroke={1.8} />}
-            <span>{it.name}</span>
+            <span>{t(it.nameKey)}</span>
           </div>
         ))}
       </div>

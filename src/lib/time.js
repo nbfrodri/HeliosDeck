@@ -1,42 +1,44 @@
 /**
- * Format a Date in a specific IANA timezone, falling back to the browser
- * timezone if `tz` is null/undefined. All timezone-aware UI formatting in
- * the app should go through here so locations behave consistently.
+ * Format a Date in a specific IANA timezone using the given UI locale.
+ * All timezone-aware UI formatting in the app should go through here so
+ * locations behave consistently.
  */
-export function formatInZone(date, tz, options = {}) {
+export function formatInZone(date, tz, options = {}, locale = 'es') {
   if (!date || isNaN(date)) return '—';
-  return new Intl.DateTimeFormat('es-ES', { timeZone: tz || undefined, ...options })
+  const tag = bcp47(locale);
+  return new Intl.DateTimeFormat(tag, { timeZone: tz || undefined, ...options })
     .format(date);
 }
 
-export function formatHM(date, tz) {
-  return formatInZone(date, tz, { hour: '2-digit', minute: '2-digit', hour12: false });
+export function formatHM(date, tz, locale = 'es') {
+  return formatInZone(date, tz, { hour: '2-digit', minute: '2-digit', hour12: false }, locale);
 }
 
-export function formatHMS(date, tz, hour12 = false) {
+export function formatHMS(date, tz, hour12 = false, locale = 'es') {
   return formatInZone(date, tz, {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
     hour12
-  });
+  }, locale);
 }
 
-export function formatDate(date, tz) {
+export function formatDate(date, tz, locale = 'es') {
   return formatInZone(date, tz, {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
     timeZone: tz || undefined
-  });
+  }, locale);
 }
 
 /**
  * Returns parts of a time formatted in the given timezone. Useful when we
  * need each part separately (e.g. for big-display clock layouts).
  */
-export function timeParts(date, tz, hour12 = false) {
-  const formatter = new Intl.DateTimeFormat('es-ES', {
+export function timeParts(date, tz, hour12 = false, locale = 'es') {
+  const tag = bcp47(locale);
+  const formatter = new Intl.DateTimeFormat(tag, {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
@@ -74,4 +76,10 @@ export function tzShortLabel(tz, ref = new Date()) {
   } catch {
     return '';
   }
+}
+
+function bcp47(locale) {
+  if (locale === 'es') return 'es-ES';
+  if (locale === 'en') return 'en-US';
+  return locale;
 }

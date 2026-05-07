@@ -10,10 +10,10 @@ import {
 import { useEarthquakes } from '../hooks/useEarthquakes.js';
 import { useWeather } from '../hooks/useWeather.js';
 import {
-  weatherCodeToLabel,
   weatherCodeToIcon,
   weatherCodeToColor,
 } from '../lib/api/openMeteo.js';
+import { useTranslation } from '../i18n.jsx';
 
 const CENTER = [20, 0];
 const ZOOM = 2;
@@ -50,20 +50,25 @@ function magRadius(m) {
   return Math.max(4, (m - 2) * 2.4);
 }
 
-function relTime(ms) {
-  const diff = Date.now() - ms;
-  if (diff < 60_000) return 'just now';
-  const min = Math.floor(diff / 60_000);
-  if (min < 60) return `${min} min ago`;
-  const h = Math.floor(min / 60);
-  if (h < 24) return `${h}h ago`;
-  return `${Math.floor(h / 24)}d ago`;
+function useRelTime() {
+  const { t } = useTranslation();
+  return (ms) => {
+    const diff = Date.now() - ms;
+    if (diff < 60_000) return t('earthquakes.time.justNow');
+    const min = Math.floor(diff / 60_000);
+    if (min < 60) return t('earthquakes.time.minAgo', { n: min });
+    const h = Math.floor(min / 60);
+    if (h < 24) return t('earthquakes.time.hourAgo', { n: h });
+    return t('earthquakes.time.dayAgo', { n: Math.floor(h / 24) });
+  };
 }
 
 function PopupBody({ feature }) {
   const [lon, lat, depth] = feature.geometry.coordinates;
   const m = feature.properties?.mag;
-  const place = feature.properties?.place ?? 'Unknown location';
+  const { t } = useTranslation();
+  const relTime = useRelTime();
+  const place = feature.properties?.place ?? t('earthquakes.unknownLocation');
   const time = feature.properties?.time;
   const url = feature.properties?.url;
 
@@ -118,9 +123,9 @@ function PopupBody({ feature }) {
       </div>
 
       <div className="map-popup__weather">
-        <div className="map-popup__weather-label">Local conditions</div>
-        {isLoading && <div className="map-popup__weather-state">Loading…</div>}
-        {isError && <div className="map-popup__weather-state">No data</div>}
+        <div className="map-popup__weather-label">{t('map.popup.localConditions')}</div>
+        {isLoading && <div className="map-popup__weather-state">{t('map.popup.loading')}</div>}
+        {isError && <div className="map-popup__weather-state">{t('map.popup.noData')}</div>}
         {cur && (
           <>
             <div className="map-popup__weather-row">
@@ -137,7 +142,7 @@ function PopupBody({ feature }) {
                   {Math.round(cur.temperature_2m)}°
                 </div>
                 <div className="map-popup__condition">
-                  {weatherCodeToLabel(cur.weather_code)}
+                  {t(`widget.weather.codes.${cur.weather_code}`)}
                 </div>
               </div>
             </div>
@@ -165,6 +170,7 @@ function PopupBody({ feature }) {
 export default function MapPage() {
   const [hoursWindow, setHoursWindow] = useState(24 * 7);
   const minMagnitude = 4.5;
+  const { t } = useTranslation();
   const { data, isLoading, isError, isFetching } = useEarthquakes({
     minMagnitude,
     hoursWindow,
@@ -178,20 +184,23 @@ export default function MapPage() {
     <main className="page page--map">
       <header className="map-header">
         <div className="map-header__intro">
-          <h1 className="map-header__title">Seismic + weather map</h1>
+          <h1 className="map-header__title">{t('map.title')}</h1>
           <p className="map-header__sub">
-            USGS · magnitude ≥ {minMagnitude.toFixed(1)} · last {windowLabel}
+            {t('map.subtitle', {
+              min: minMagnitude.toFixed(1),
+              window: windowLabel,
+            })}
           </p>
         </div>
         <div className="map-header__controls">
           <div className="map-header__count">
-            {isLoading && 'Loading…'}
-            {isError && 'Failed to load'}
+            {isLoading && t('map.loading')}
+            {isError && t('map.loadFailed')}
             {!isLoading && !isError && (
               <>
                 <span className="map-header__count-num">{features.length}</span>
-                <span className="map-header__count-label">events</span>
-                {isFetching && <span className="map-header__refresh">refreshing…</span>}
+                <span className="map-header__count-label">{t('map.events')}</span>
+                {isFetching && <span className="map-header__refresh">{t('map.refreshing')}</span>}
               </>
             )}
           </div>
@@ -262,7 +271,7 @@ export default function MapPage() {
         </MapContainer>
 
         <div className="map-legend" aria-label="Magnitude legend">
-          <div className="map-legend__title">Magnitude</div>
+          <div className="map-legend__title">{t('map.magnitude')}</div>
           <div className="map-legend__scale">
             {MAG_TIERS.map((t) => (
               <div key={t.label} className="map-legend__row">

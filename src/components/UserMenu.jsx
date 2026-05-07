@@ -1,11 +1,14 @@
 import { IconLogout } from '@tabler/icons-react';
 import { useAuth } from '../contexts/AuthContext.jsx';
+import { useTranslation } from '../i18n.jsx';
 
 export function UserMenu() {
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
   if (!user) return null;
 
   const display = user.firstName || user.username;
+  const label = t('nav.logout');
 
   return (
     <div className="user-menu" aria-label="Session">
@@ -17,8 +20,8 @@ export function UserMenu() {
         type="button"
         className="btn btn--icon"
         onClick={logout}
-        title="Cerrar sesión"
-        aria-label="Cerrar sesión"
+        title={label}
+        aria-label={label}
       >
         <IconLogout size={14} stroke={1.8} />
       </button>

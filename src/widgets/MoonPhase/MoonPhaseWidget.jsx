@@ -1,18 +1,19 @@
 import { useEffect, useMemo, useState } from 'react';
 import SunCalc from 'suncalc';
 import { IconArrowUpRight, IconArrowDownRight } from '@tabler/icons-react';
+import { useTranslation } from '../../i18n.jsx';
 
 const SYNODIC_MONTH_DAYS = 29.530588853;
 
-function phaseLabel(phase) {
-  if (phase < 0.03 || phase > 0.97) return 'Luna nueva';
-  if (phase < 0.22) return 'Creciente';
-  if (phase < 0.28) return 'Cuarto creciente';
-  if (phase < 0.47) return 'Gibosa creciente';
-  if (phase < 0.53) return 'Luna llena';
-  if (phase < 0.72) return 'Gibosa menguante';
-  if (phase < 0.78) return 'Cuarto menguante';
-  return 'Menguante';
+function phaseLabelKey(phase) {
+  if (phase < 0.03 || phase > 0.97) return 'new';
+  if (phase < 0.22) return 'waxingCrescent';
+  if (phase < 0.28) return 'firstQuarter';
+  if (phase < 0.47) return 'waxingGibbous';
+  if (phase < 0.53) return 'full';
+  if (phase < 0.72) return 'waningGibbous';
+  if (phase < 0.78) return 'lastQuarter';
+  return 'waningCrescent';
 }
 
 function buildMoonPath(phase, r) {
@@ -62,10 +63,10 @@ function MoonGlyph({ phase, size = 92, className = '' }) {
 }
 
 const PHASE_TARGETS = [
-  { value: 0.25, label: 'Cuarto creciente' },
-  { value: 0.5, label: 'Luna llena' },
-  { value: 0.75, label: 'Cuarto menguante' },
-  { value: 0, label: 'Luna nueva' }
+  { value: 0.25, key: 'firstQuarter' },
+  { value: 0.5, key: 'full' },
+  { value: 0.75, key: 'lastQuarter' },
+  { value: 0, key: 'new' }
 ];
 
 function findNextPhase(from, targetValue, maxDays = 60) {
@@ -86,16 +87,16 @@ function findNextPhase(from, targetValue, maxDays = 60) {
   return null;
 }
 
-function formatRelative(date, now) {
+function formatRelative(date, now, t, locale) {
   const days = Math.round((date - now) / (1000 * 60 * 60 * 24));
-  if (days === 0) return 'hoy';
-  if (days === 1) return 'mañana';
-  if (days < 14) return `en ${days} días`;
-  return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+  if (days === 0) return t('widget.moonPhase.today');
+  if (days === 1) return t('widget.moonPhase.tomorrow');
+  if (days < 14) return t('widget.moonPhase.inDays', { n: days });
+  return date.toLocaleDateString(locale === 'en' ? 'en-US' : 'es-ES', { day: 'numeric', month: 'short' });
 }
 
-function formatAbsolute(date) {
-  return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+function formatAbsolute(date, locale) {
+  return date.toLocaleDateString(locale === 'en' ? 'en-US' : 'es-ES', { day: 'numeric', month: 'short' });
 }
 
 function Stat({ label, value, unit, hint, valueColor }) {
@@ -115,6 +116,7 @@ function Stat({ label, value, unit, hint, valueColor }) {
 
 export function MoonPhaseWidget({ location }) {
   const [now, setNow] = useState(() => new Date());
+  const { t, locale } = useTranslation();
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 60 * 1000);
     return () => clearInterval(id);
@@ -141,6 +143,7 @@ export function MoonPhaseWidget({ location }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dayKey]);
 
+  const localeTag = locale === 'en' ? 'en-US' : 'es-ES';
   return (
     <div className="moon">
       <div className="moon__head">
@@ -150,52 +153,52 @@ export function MoonPhaseWidget({ location }) {
             <span>{pct}</span>
             <span className="moon__metric-unit">%</span>
           </div>
-          <div className="label">iluminación de la cara visible</div>
-          <div className="moon__phase-name">{phaseLabel(ill.phase)}</div>
+          <div className="label">{t('widget.moonPhase.illumination')}</div>
+          <div className="moon__phase-name">{t(`widget.moonPhase.phases.${phaseLabelKey(ill.phase)}`)}</div>
           <div className="moon__trend">
             {waxing
               ? <IconArrowUpRight size={11} stroke={2} color="var(--good)" />
               : <IconArrowDownRight size={11} stroke={2} color="var(--accent-warm)" />}
-            <span>{waxing ? 'creciendo cada noche' : 'menguando cada noche'}</span>
+            <span>{waxing ? t('widget.moonPhase.waxing') : t('widget.moonPhase.waning')}</span>
           </div>
         </div>
       </div>
 
       <div className="moon-stats">
         <Stat
-          label="Edad"
+          label={t('widget.moonPhase.age')}
           value={ageDays.toFixed(1)}
           unit="d"
-          hint={`${ageDays.toFixed(1)} días desde la última luna nueva (ciclo de 29.5d)`}
+          hint={t('widget.moonPhase.ageHint', { days: ageDays.toFixed(1) })}
         />
         <Stat
-          label="Distancia"
+          label={t('widget.moonPhase.distance')}
           value={(distanceKm / 1000).toFixed(0)}
           unit="·10³ km"
-          hint={`${distanceKm.toLocaleString('es-ES')} km hasta la Luna ahora mismo`}
+          hint={t('widget.moonPhase.distanceHint', { km: distanceKm.toLocaleString(localeTag) })}
         />
         <Stat
-          label="Altitud"
+          label={t('widget.moonPhase.altitude')}
           value={`${altitudeDeg >= 0 ? '+' : ''}${altitudeDeg.toFixed(0)}`}
           unit="°"
           hint={aboveHorizon
-            ? `Sobre el horizonte: ${altitudeDeg.toFixed(1)}° de elevación`
-            : `Bajo el horizonte: ${Math.abs(altitudeDeg).toFixed(1)}° por debajo`}
+            ? t('widget.moonPhase.altAbove', { deg: altitudeDeg.toFixed(1) })
+            : t('widget.moonPhase.altBelow', { deg: Math.abs(altitudeDeg).toFixed(1) })}
           valueColor={aboveHorizon ? 'var(--text-1)' : 'var(--text-3)'}
         />
       </div>
 
       <div className="moon-upcoming">
-        <div className="label">Próximas fases</div>
+        <div className="label">{t('widget.moonPhase.upcoming')}</div>
         <div className="moon-upcoming__list">
           {upcoming.map((p) => (
-            <div key={p.label} className="moon-upcoming__row">
+            <div key={p.key} className="moon-upcoming__row">
               <span className="moon-upcoming__icon">
                 <MoonGlyph phase={p.value} size={20} />
               </span>
-              <span className="moon-upcoming__label">{p.label}</span>
-              <span className="moon-upcoming__abs">{formatAbsolute(p.date)}</span>
-              <span className="moon-upcoming__rel">{formatRelative(p.date, now)}</span>
+              <span className="moon-upcoming__label">{t(`widget.moonPhase.phases.${p.key}`)}</span>
+              <span className="moon-upcoming__abs">{formatAbsolute(p.date, locale)}</span>
+              <span className="moon-upcoming__rel">{formatRelative(p.date, now, t, locale)}</span>
             </div>
           ))}
         </div>

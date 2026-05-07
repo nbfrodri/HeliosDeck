@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useEarthquakes } from '../hooks/useEarthquakes.js';
 import { MagnitudeChart } from '../components/MagnitudeChart.jsx';
 import { EarthquakeList } from '../components/EarthquakeList.jsx';
+import { useTranslation } from '../i18n.jsx';
 
 const WINDOW_OPTIONS = [
   { hours: 1, label: '1h' },
@@ -10,20 +11,25 @@ const WINDOW_OPTIONS = [
   { hours: 24 * 30, label: '30d' },
 ];
 
-function relativeShort(ms) {
-  const diff = Date.now() - ms;
-  if (diff < 60_000) return 'just now';
-  const min = Math.floor(diff / 60_000);
-  if (min < 60) return `${min}m ago`;
-  const h = Math.floor(min / 60);
-  if (h < 24) return `${h}h ago`;
-  const d = Math.floor(h / 24);
-  return `${d}d ago`;
+function useRelativeShort() {
+  const { t } = useTranslation();
+  return (ms) => {
+    const diff = Date.now() - ms;
+    if (diff < 60_000) return t('earthquakes.time.justNow');
+    const min = Math.floor(diff / 60_000);
+    if (min < 60) return t('earthquakes.time.minAgo', { n: min });
+    const h = Math.floor(min / 60);
+    if (h < 24) return t('earthquakes.time.hourAgo', { n: h });
+    const d = Math.floor(h / 24);
+    return t('earthquakes.time.dayAgo', { n: d });
+  };
 }
 
 export default function Earthquakes() {
   const [minMagnitude, setMinMagnitude] = useState(4.5);
   const [hoursWindow, setHoursWindow] = useState(24 * 7);
+  const { t } = useTranslation();
+  const relativeShort = useRelativeShort();
 
   const { data, isLoading, isError, isFetching, error } = useEarthquakes({
     minMagnitude,
@@ -69,7 +75,7 @@ export default function Earthquakes() {
         </div>
         <div className="quakes-filters">
           <label className="quakes-filter quakes-filter--slider">
-            <span className="quakes-filter__label">Min magnitude</span>
+            <span className="quakes-filter__label">{t('earthquakes.minMagnitude')}</span>
             <div className="quakes-filter__row">
               <input
                 type="range"
@@ -84,7 +90,7 @@ export default function Earthquakes() {
             </div>
           </label>
           <div className="quakes-filter quakes-filter--tabs">
-            <span className="quakes-filter__label">Window</span>
+            <span className="quakes-filter__label">{t('earthquakes.window')}</span>
             <div
               className="quakes-tabs"
               role="tablist"
@@ -111,33 +117,35 @@ export default function Earthquakes() {
       {isLoading && (
         <div className="card auth-pending">
           <span className="auth-pending__spinner" aria-hidden />
-          <span>Loading earthquakes…</span>
+          <span>{t('earthquakes.loading')}</span>
         </div>
       )}
 
       {isError && (
         <div className="card login-form__error">
-          Failed to load: {error?.message ?? 'unknown error'}
+          {t('earthquakes.loadFailed', {
+            error: error?.message ?? t('earthquakes.unknownError'),
+          })}
         </div>
       )}
 
       {!isLoading && !isError && (
         <div className="quakes-grid">
           <section className="card quakes-section quakes-section--chart">
-            <h2 className="quakes-section__title">Magnitude distribution</h2>
+            <h2 className="quakes-section__title">{t('earthquakes.magnitudeDistribution')}</h2>
             <MagnitudeChart features={features} />
           </section>
 
           <section className="card quakes-section quakes-section--stats">
-            <h2 className="quakes-section__title">Overview</h2>
+            <h2 className="quakes-section__title">{t('earthquakes.overview')}</h2>
             {stats ? (
               <div className="quakes-stats">
                 <div className="quakes-stat">
-                  <div className="quakes-stat__label">Events</div>
+                  <div className="quakes-stat__label">{t('earthquakes.stats.total')}</div>
                   <div className="quakes-stat__value">{stats.total}</div>
                 </div>
                 <div className="quakes-stat">
-                  <div className="quakes-stat__label">Max mag</div>
+                  <div className="quakes-stat__label">{t('earthquakes.stats.max')}</div>
                   <div className="quakes-stat__value">
                     {stats.max != null ? stats.max.toFixed(1) : '—'}
                   </div>
@@ -148,13 +156,13 @@ export default function Earthquakes() {
                   )}
                 </div>
                 <div className="quakes-stat">
-                  <div className="quakes-stat__label">Latest</div>
+                  <div className="quakes-stat__label">{t('earthquakes.stats.latest')}</div>
                   <div className="quakes-stat__value quakes-stat__value--small">
                     {stats.latest ? relativeShort(stats.latest) : '—'}
                   </div>
                 </div>
                 <div className="quakes-stat">
-                  <div className="quakes-stat__label">Deepest</div>
+                  <div className="quakes-stat__label">{t('earthquakes.stats.deepest')}</div>
                   <div className="quakes-stat__value quakes-stat__value--small">
                     {stats.deepest != null ? `${Math.round(stats.deepest)} km` : '—'}
                   </div>
@@ -166,15 +174,15 @@ export default function Earthquakes() {
                 </div>
               </div>
             ) : (
-              <p className="quakes-section__empty">No events.</p>
+              <p className="quakes-section__empty">{t('earthquakes.noEvents')}</p>
             )}
           </section>
 
           <section className="card quakes-section quakes-section--list">
             <h2 className="quakes-section__title">
-              <span>Events</span>
+              <span>{t('earthquakes.events')}</span>
               {isFetching && (
-                <span className="quakes-section__refresh">refreshing…</span>
+                <span className="quakes-section__refresh">{t('earthquakes.refreshing')}</span>
               )}
             </h2>
             <EarthquakeList features={features} />

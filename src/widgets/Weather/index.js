@@ -3,8 +3,8 @@ import { WeatherWidget } from './WeatherWidget.jsx';
 
 export const WeatherDescriptor = {
   type: 'weather',
-  name: 'Tiempo actual',
-  description: 'Temperatura, viento y humedad para tu ubicación.',
+  nameKey: 'widget.weather.name',
+  descriptionKey: 'widget.weather.description',
   Icon: IconCloud,
   defaultSize: { w: 5, h: 5 },
   minSize: { w: 4, h: 4 },

@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
+import { useTranslation, DEFAULT_LOCALE } from '../i18n.jsx';
 
 const DEMO = { username: 'emilys', password: 'emilyspass' };
 
@@ -8,7 +9,10 @@ export default function Login() {
   const { login, status } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname ?? '/dashboard';
+  const { locale } = useParams();
+  const { t } = useTranslation();
+  const lng = locale || DEFAULT_LOCALE;
+  const from = location.state?.from?.pathname ?? `/${lng}/dashboard`;
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -26,7 +30,7 @@ export default function Login() {
       await login(u, p);
       navigate(from, { replace: true });
     } catch (err) {
-      setError(err.message ?? 'Login failed');
+      setError(err.message ?? t('auth.fallbackError'));
     } finally {
       setSubmitting(false);
     }
@@ -42,9 +46,9 @@ export default function Login() {
         }}
         noValidate
       >
-        <h1 className="card__title">Log in</h1>
+        <h1 className="card__title">{t('auth.login.title')}</h1>
         <p className="card__body">
-          Authenticated against{' '}
+          {t('auth.login.intro')}{' '}
           <a href="https://dummyjson.com/docs/auth" target="_blank" rel="noreferrer">
             dummyjson
           </a>
@@ -57,15 +61,15 @@ export default function Login() {
           onClick={() => attempt(DEMO.username, DEMO.password)}
           disabled={submitting}
         >
-          Continue as demo user (emilys)
+          {t('auth.login.demo')}
         </button>
 
         <div className="login-form__divider" aria-hidden>
-          <span>or sign in</span>
+          <span>{t('auth.login.or')}</span>
         </div>
 
         <label className="login-form__field">
-          <span className="login-form__label">Username</span>
+          <span className="login-form__label">{t('auth.login.username')}</span>
           <input
             type="text"
             value={username}
@@ -76,7 +80,7 @@ export default function Login() {
         </label>
 
         <label className="login-form__field">
-          <span className="login-form__label">Password</span>
+          <span className="login-form__label">{t('auth.login.password')}</span>
           <input
             type="password"
             value={password}
@@ -97,7 +101,7 @@ export default function Login() {
           className="btn btn--accent btn--lg login-form__submit"
           disabled={submitting || !username || !password}
         >
-          {submitting ? 'Signing in…' : 'Sign in'}
+          {submitting ? t('auth.login.submitting') : t('auth.login.submit')}
         </button>
       </form>
     </main>

@@ -1,0 +1,240 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "earthquakes": "Earthquakes",
+    "map": "Map",
+    "login": "Log in",
+    "logout": "Log out"
+  },
+  "auth": {
+    "login": {
+      "title": "Log in",
+      "intro": "Authenticated against",
+      "demo": "Continue as demo user (emilys)",
+      "or": "or sign in",
+      "username": "Username",
+      "password": "Password",
+      "submit": "Sign in",
+      "submitting": "Signing in…"
+    },
+    "checking": "Checking session…",
+    "fallbackError": "Login failed"
+  },
+  "home": {
+    "lede": "A geophysical aggregator dashboard. Live earthquakes, weather, and sun/moon ephemerides — composable as widgets.",
+    "openDashboard": "Open dashboard",
+    "login": "Log in"
+  },
+  "earthquakes": {
+    "title": "Earthquakes",
+    "subtitle": "USGS · magnitude ≥ {min} · last {window}",
+    "minMagnitude": "Min magnitude",
+    "window": "Window",
+    "loading": "Loading earthquakes…",
+    "loadFailed": "Failed to load: {error}",
+    "unknownError": "unknown error",
+    "magnitudeDistribution": "Magnitude distribution",
+    "overview": "Overview",
+    "events": "Events",
+    "refreshing": "refreshing…",
+    "stats": {
+      "total": "Events",
+      "max": "Max mag",
+      "latest": "Latest",
+      "deepest": "Deepest"
+    },
+    "noEvents": "No events.",
+    "noEventsFiltered": "No events match these filters.",
+    "kmDepth": "km depth",
+    "unknownLocation": "Unknown location",
+    "unknownTime": "unknown time",
+    "time": {
+      "justNow": "just now",
+      "minAgo": "{n} min ago",
+      "hourAgo": "{n}h ago",
+      "dayAgo": "{n}d ago"
+    },
+    "chartTooltipUnit": "events"
+  },
+  "map": {
+    "title": "Seismic + weather map",
+    "subtitle": "USGS · magnitude ≥ {min} · last {window}",
+    "loading": "Loading…",
+    "loadFailed": "Failed to load",
+    "events": "events",
+    "refreshing": "refreshing…",
+    "magnitude": "Magnitude",
+    "popup": {
+      "localConditions": "Local conditions",
+      "loading": "Loading…",
+      "noData": "No data"
+    }
+  },
+  "common": {
+    "loading": "Loading…",
+    "cancel": "Cancel"
+  },
+  "toolbar": {
+    "changeLocation": "Change location",
+    "noLocation": "No location",
+    "useGps": "Use my GPS",
+    "gpsFailed": "Could not get location.",
+    "customizeSky": "Customize sky",
+    "addWidget": "Add widget",
+    "edit": "Edit",
+    "done": "Done",
+    "reset": "Reset",
+    "removeAllTooltip": "Remove all widgets",
+    "resetConfirmTitle": "Reset desktop?",
+    "resetConfirmMessage": "All widgets and their layout will be removed. This action cannot be undone.",
+    "resetConfirmAction": "Remove all"
+  },
+  "locationSearch": {
+    "placeholder": "Search city…",
+    "hint": "Global search. Type any city in the world.",
+    "noResults": "No results."
+  },
+  "emptyHero": {
+    "title": "Your sky, in miniature.",
+    "description": "Compose your desktop with widgets for weather, sun, moon and sky. Drag, resize, configure them as you wish.",
+    "addFirst": "Add your first widget",
+    "addAll": "Start with the 4 defaults"
+  },
+  "sky": {
+    "title": "Customize sky",
+    "subtitle": "Five stops, zenith to horizon.",
+    "stops": {
+      "0": "Zenith",
+      "1": "Mid sky",
+      "2": "Violet",
+      "3": "Rose",
+      "4": "Horizon"
+    },
+    "restoreDefault": "Restore default",
+    "done": "Done",
+    "modeStatic": "Static gradient",
+    "modeFluid": "Fluid · animated",
+    "editing": "Editing",
+    "presets": "Color presets",
+    "animationPreset": "Animation preset",
+    "fineTune": "Fine tune",
+    "tuneReset": "Reset",
+    "sliders": {
+      "uSpeed": "Speed",
+      "uStrength": "Intensity",
+      "uFrequency": "Frequency",
+      "uDensity": "Density",
+      "brightness": "Brightness"
+    },
+    "colorPresets": {
+      "twilight": "Twilight",
+      "aurora": "Aurora",
+      "midnight": "Midnight",
+      "dawn": "Dawn",
+      "cosmos": "Cosmos",
+      "ocean": "Ocean",
+      "forest": "Forest",
+      "volcano": "Volcano",
+      "glacier": "Glacier",
+      "lavender": "Lavender",
+      "embers": "Embers",
+      "coral": "Coral"
+    }
+  },
+  "widget": {
+    "removeAria": "Remove widget",
+    "clock": {
+      "name": "Clock",
+      "description": "Local time with seconds.",
+      "weekShort": "WK",
+      "dayOfYearShort": "DAY",
+      "in": "in",
+      "format": "Time format"
+    },
+    "moonPhase": {
+      "name": "Moon phase",
+      "description": "Current moon illumination and upcoming cycle phases.",
+      "phases": {
+        "new": "New moon",
+        "waxingCrescent": "Waxing crescent",
+        "firstQuarter": "First quarter",
+        "waxingGibbous": "Waxing gibbous",
+        "full": "Full moon",
+        "waningGibbous": "Waning gibbous",
+        "lastQuarter": "Last quarter",
+        "waningCrescent": "Waning crescent"
+      },
+      "illumination": "illumination of the visible face",
+      "waxing": "waxing every night",
+      "waning": "waning every night",
+      "age": "Age",
+      "distance": "Distance",
+      "altitude": "Altitude",
+      "ageHint": "{days} days since the last new moon (29.5d cycle)",
+      "distanceHint": "{km} km to the Moon right now",
+      "altAbove": "Above the horizon: {deg}° elevation",
+      "altBelow": "Below the horizon: {deg}° below",
+      "upcoming": "Upcoming phases",
+      "today": "today",
+      "tomorrow": "tomorrow",
+      "inDays": "in {n} days"
+    },
+    "sunTimes": {
+      "name": "Sun + moon",
+      "description": "Daily sun trajectory, sunrise, sunset and moon times.",
+      "noLocation": "Configure your location to see sunrise and sunset.",
+      "dayLength": "Day length",
+      "vsYesterday": "vs yesterday",
+      "dawn": "Dawn",
+      "goldenHour": "Golden hour",
+      "dusk": "Dusk",
+      "moonRise": "Moonrise",
+      "moonSet": "Moonset"
+    },
+    "weather": {
+      "name": "Current weather",
+      "description": "Temperature, wind and humidity for your location.",
+      "loading": "Loading…",
+      "loadFailed": "Couldn't load weather.",
+      "noLocation": "Configure your location in the toolbar.",
+      "feelsLike": "Feels like",
+      "humidity": "Humidity",
+      "wind": "Wind",
+      "uv": {
+        "low": "Low",
+        "moderate": "Moderate",
+        "high": "High",
+        "veryHigh": "Very high",
+        "extreme": "Extreme"
+      },
+      "codes": {
+        "0": "Clear",
+        "1": "Mostly clear",
+        "2": "Partly cloudy",
+        "3": "Overcast",
+        "45": "Fog",
+        "48": "Rime fog",
+        "51": "Light drizzle",
+        "53": "Drizzle",
+        "55": "Heavy drizzle",
+        "61": "Light rain",
+        "63": "Rain",
+        "65": "Heavy rain",
+        "71": "Light snow",
+        "73": "Snow",
+        "75": "Heavy snow",
+        "80": "Showers",
+        "81": "Heavy showers",
+        "82": "Violent showers",
+        "95": "Thunderstorm",
+        "96": "Thunderstorm with hail",
+        "99": "Heavy thunderstorm with hail"
+      }
+    }
+  },
+  "widgetPicker": {
+    "title": "Add widget",
+    "subtitle": "{n} available",
+    "close": "Close"
+  }
+}

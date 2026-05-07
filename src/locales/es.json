@@ -1,0 +1,240 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "earthquakes": "Terremotos",
+    "map": "Mapa",
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión"
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar sesión",
+      "intro": "Autenticado contra",
+      "demo": "Entrar como usuario demo (emilys)",
+      "or": "o inicia sesión",
+      "username": "Usuario",
+      "password": "Contraseña",
+      "submit": "Entrar",
+      "submitting": "Entrando…"
+    },
+    "checking": "Comprobando sesión…",
+    "fallbackError": "Error al iniciar sesión"
+  },
+  "home": {
+    "lede": "Un dashboard agregador de datos geofísicos. Terremotos en vivo, clima y efemérides solares/lunares — todo componible como widgets.",
+    "openDashboard": "Abrir dashboard",
+    "login": "Iniciar sesión"
+  },
+  "earthquakes": {
+    "title": "Terremotos",
+    "subtitle": "USGS · magnitud ≥ {min} · últimas {window}",
+    "minMagnitude": "Magnitud mín.",
+    "window": "Ventana",
+    "loading": "Cargando terremotos…",
+    "loadFailed": "Fallo al cargar: {error}",
+    "unknownError": "error desconocido",
+    "magnitudeDistribution": "Distribución por magnitud",
+    "overview": "Resumen",
+    "events": "Eventos",
+    "refreshing": "actualizando…",
+    "stats": {
+      "total": "Eventos",
+      "max": "Magnitud máx.",
+      "latest": "Más reciente",
+      "deepest": "Más profundo"
+    },
+    "noEvents": "Sin eventos.",
+    "noEventsFiltered": "Ningún evento coincide con estos filtros.",
+    "kmDepth": "km de profundidad",
+    "unknownLocation": "Ubicación desconocida",
+    "unknownTime": "tiempo desconocido",
+    "time": {
+      "justNow": "ahora mismo",
+      "minAgo": "hace {n} min",
+      "hourAgo": "hace {n}h",
+      "dayAgo": "hace {n}d"
+    },
+    "chartTooltipUnit": "eventos"
+  },
+  "map": {
+    "title": "Mapa sísmico + clima",
+    "subtitle": "USGS · magnitud ≥ {min} · últimas {window}",
+    "loading": "Cargando…",
+    "loadFailed": "Fallo al cargar",
+    "events": "eventos",
+    "refreshing": "actualizando…",
+    "magnitude": "Magnitud",
+    "popup": {
+      "localConditions": "Condiciones locales",
+      "loading": "Cargando…",
+      "noData": "Sin datos"
+    }
+  },
+  "common": {
+    "loading": "Cargando…",
+    "cancel": "Cancelar"
+  },
+  "toolbar": {
+    "changeLocation": "Cambiar ubicación",
+    "noLocation": "Sin ubicación",
+    "useGps": "Usar mi GPS",
+    "gpsFailed": "No se pudo obtener la ubicación.",
+    "customizeSky": "Personalizar cielo",
+    "addWidget": "Añadir widget",
+    "edit": "Editar",
+    "done": "Hecho",
+    "reset": "Reset",
+    "removeAllTooltip": "Eliminar todos los widgets",
+    "resetConfirmTitle": "¿Reset del escritorio?",
+    "resetConfirmMessage": "Se eliminarán todos los widgets y su disposición. Esta acción no se puede deshacer.",
+    "resetConfirmAction": "Eliminar todo"
+  },
+  "locationSearch": {
+    "placeholder": "Buscar ciudad…",
+    "hint": "Búsqueda global. Escribe cualquier ciudad del mundo.",
+    "noResults": "Sin resultados."
+  },
+  "emptyHero": {
+    "title": "Tu cielo, en miniatura.",
+    "description": "Compón tu escritorio con widgets de tiempo, sol, luna y cielo. Arrástralos donde quieras, redimensiónalos, configúralos.",
+    "addFirst": "Añadir tu primer widget",
+    "addAll": "Empezar con los 4 por defecto"
+  },
+  "sky": {
+    "title": "Personaliza el cielo",
+    "subtitle": "Cinco paradas, de cenit a horizonte.",
+    "stops": {
+      "0": "Cenit",
+      "1": "Cielo medio",
+      "2": "Violeta",
+      "3": "Rosa",
+      "4": "Horizonte"
+    },
+    "restoreDefault": "Restaurar por defecto",
+    "done": "Hecho",
+    "modeStatic": "Gradiente estático",
+    "modeFluid": "Fluido · animado",
+    "editing": "Editando",
+    "presets": "Presets de color",
+    "animationPreset": "Preset de animación",
+    "fineTune": "Ajuste fino",
+    "tuneReset": "Reset",
+    "sliders": {
+      "uSpeed": "Velocidad",
+      "uStrength": "Intensidad",
+      "uFrequency": "Frecuencia",
+      "uDensity": "Densidad",
+      "brightness": "Brillo"
+    },
+    "colorPresets": {
+      "twilight": "Crepúsculo",
+      "aurora": "Aurora",
+      "midnight": "Medianoche",
+      "dawn": "Amanecer",
+      "cosmos": "Cosmos",
+      "ocean": "Océano",
+      "forest": "Bosque",
+      "volcano": "Volcán",
+      "glacier": "Glaciar",
+      "lavender": "Lavanda",
+      "embers": "Brasas",
+      "coral": "Coral"
+    }
+  },
+  "widget": {
+    "removeAria": "Eliminar widget",
+    "clock": {
+      "name": "Reloj",
+      "description": "Hora local con segundos.",
+      "weekShort": "SEM",
+      "dayOfYearShort": "DÍA",
+      "in": "en",
+      "format": "Formato horario"
+    },
+    "moonPhase": {
+      "name": "Fase lunar",
+      "description": "Iluminación actual de la luna y próximas fases del ciclo.",
+      "phases": {
+        "new": "Luna nueva",
+        "waxingCrescent": "Creciente",
+        "firstQuarter": "Cuarto creciente",
+        "waxingGibbous": "Gibosa creciente",
+        "full": "Luna llena",
+        "waningGibbous": "Gibosa menguante",
+        "lastQuarter": "Cuarto menguante",
+        "waningCrescent": "Menguante"
+      },
+      "illumination": "iluminación de la cara visible",
+      "waxing": "creciendo cada noche",
+      "waning": "menguando cada noche",
+      "age": "Edad",
+      "distance": "Distancia",
+      "altitude": "Altitud",
+      "ageHint": "{days} días desde la última luna nueva (ciclo de 29.5d)",
+      "distanceHint": "{km} km hasta la Luna ahora mismo",
+      "altAbove": "Sobre el horizonte: {deg}° de elevación",
+      "altBelow": "Bajo el horizonte: {deg}° por debajo",
+      "upcoming": "Próximas fases",
+      "today": "hoy",
+      "tomorrow": "mañana",
+      "inDays": "en {n} días"
+    },
+    "sunTimes": {
+      "name": "Sol y luna",
+      "description": "Trayectoria diurna del sol, amanecer, atardecer y horarios lunares.",
+      "noLocation": "Configura tu ubicación para ver salida y puesta.",
+      "dayLength": "Duración del día",
+      "vsYesterday": "vs ayer",
+      "dawn": "Aurora",
+      "goldenHour": "Hora dorada",
+      "dusk": "Crepúsculo",
+      "moonRise": "Salida luna",
+      "moonSet": "Puesta luna"
+    },
+    "weather": {
+      "name": "Tiempo actual",
+      "description": "Temperatura, viento y humedad para tu ubicación.",
+      "loading": "Cargando…",
+      "loadFailed": "No se pudo cargar el tiempo.",
+      "noLocation": "Configura tu ubicación en la barra superior.",
+      "feelsLike": "Sensación",
+      "humidity": "Humedad",
+      "wind": "Viento",
+      "uv": {
+        "low": "Bajo",
+        "moderate": "Moderado",
+        "high": "Alto",
+        "veryHigh": "Muy alto",
+        "extreme": "Extremo"
+      },
+      "codes": {
+        "0": "Despejado",
+        "1": "Mayormente despejado",
+        "2": "Parcialmente nublado",
+        "3": "Nublado",
+        "45": "Niebla",
+        "48": "Niebla con escarcha",
+        "51": "Llovizna ligera",
+        "53": "Llovizna",
+        "55": "Llovizna densa",
+        "61": "Lluvia ligera",
+        "63": "Lluvia",
+        "65": "Lluvia fuerte",
+        "71": "Nevada ligera",
+        "73": "Nevada",
+        "75": "Nevada fuerte",
+        "80": "Chubascos",
+        "81": "Chubascos fuertes",
+        "82": "Chubascos violentos",
+        "95": "Tormenta",
+        "96": "Tormenta con granizo",
+        "99": "Tormenta fuerte con granizo"
+      }
+    }
+  },
+  "widgetPicker": {
+    "title": "Añadir widget",
+    "subtitle": "{n} disponibles",
+    "close": "Cerrar"
+  }
+}
