@@ -3,6 +3,14 @@ import { useSettingsStore } from '../store/useSettingsStore.js';
 import { DEFAULT_GRADIENT } from '../store/defaults.js';
 import { getPresetConfig, TUNABLE_KEYS } from './skyFluidConfig.js';
 
+/**
+ * @ai-assisted Claude proposed: (a) lazy-loading this whole module from
+ *   Sky.jsx so the WebGL bundle never lands in the main chunk, (b) the
+ *   preset/custom override merge pattern, (c) standardising every preset on
+ *   `lightType: '3d'` + `envPreset: 'city'` after intermittent "Cannot set
+ *   properties of undefined (setting 'mapping')" errors with other env
+ *   presets. Three was pinned to ~0.169 to match shadergradient's build.
+ */
 export default function SkyFluidShader() {
   const stops = useSettingsStore((s) => s.gradientStops) ?? DEFAULT_GRADIENT;
   const presetKey = useSettingsStore((s) => s.skyFluidPreset) ?? 'liquid-wave';

@@ -36,6 +36,13 @@ function pickProfile(payload) {
   };
 }
 
+/**
+ * @ai-assisted Claude proposed the bootstrap state machine
+ * (loading → authenticated|unauthenticated) and the boot-time refresh fallback:
+ * read tokens from localStorage → /auth/me → on 401 try /auth/refresh → on
+ * second failure clear and become unauthenticated. Reviewed against the
+ * dummyjson auth docs and tested manually with valid + expired tokens.
+ */
 export function AuthProvider({ children }) {
   const [state, setState] = useState({
     status: 'loading',

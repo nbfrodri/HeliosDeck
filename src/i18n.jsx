@@ -53,6 +53,8 @@ export function useTranslation() {
  * `/en/earthquakes`  + 'es' → `/es/earthquakes`
  * `/dashboard`       + 'es' → `/es/dashboard`
  * `/`                + 'es' → `/es`
+ * @ai-assisted Claude proposed the split-and-rebuild approach over a regex.
+ *   Validated by walking the language switcher across every route.
  */
 export function replaceLang(pathname, newLang) {
   const parts = pathname.split('/').filter(Boolean);
