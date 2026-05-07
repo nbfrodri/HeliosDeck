@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { HexColorPicker, HexColorInput } from 'react-colorful';
 import { useSettingsStore } from '../store/useSettingsStore.js';
 import { DEFAULT_GRADIENT } from '../store/defaults.js';
 import { Modal } from './Modal.jsx';
@@ -40,13 +42,16 @@ export function SkySettings({ open, onClose }) {
   const setStops = useSettingsStore((s) => s.setGradientStops);
   const reset = useSettingsStore((s) => s.resetGradient);
 
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeColor = stops[activeIndex] ?? '#000000';
+
   return (
     <Modal
       open={open}
       onClose={onClose}
       title="Personaliza el cielo"
       subtitle="Cinco paradas, de cenit a horizonte."
-      width={560}
+      width={620}
       footer={
         <>
           <button className="btn" onClick={reset}>
@@ -58,26 +63,52 @@ export function SkySettings({ open, onClose }) {
         </>
       }
     >
-      <div style={{ display: 'flex', gap: 18 }}>
+      <div className="sky-grid">
         <div className="sky-preview" style={previewStyle(stops)} aria-hidden />
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div className="sky-stops">
           {stops.map((color, i) => (
-            <label key={i} className="color-row">
+            <button
+              key={i}
+              type="button"
+              className={`color-row${activeIndex === i ? ' color-row--active' : ''}`}
+              onClick={() => setActiveIndex(i)}
+              aria-pressed={activeIndex === i}
+            >
+              <span
+                className="color-row__swatch"
+                style={{ background: color }}
+                aria-hidden
+              />
               <span className="color-row__label">{STOP_LABELS[i]}</span>
               <span className="color-row__hex">{color.toUpperCase()}</span>
-              <input
-                type="color"
-                value={color}
-                onChange={(e) => setStop(i, e.target.value)}
-                aria-label={STOP_LABELS[i]}
-              />
-            </label>
+            </button>
           ))}
         </div>
       </div>
 
-      <div style={{ marginTop: 22 }}>
-        <div className="label" style={{ marginBottom: 10 }}>Presets</div>
+      <div className="color-picker-pane">
+        <HexColorPicker
+          color={activeColor}
+          onChange={(c) => setStop(activeIndex, c)}
+        />
+        <div className="color-picker-pane__meta">
+          <div className="color-picker-pane__caption">
+            Editando <strong>{STOP_LABELS[activeIndex]}</strong>
+          </div>
+          <label className="hex-input">
+            <span className="hex-input__hash">#</span>
+            <HexColorInput
+              color={activeColor}
+              onChange={(c) => setStop(activeIndex, c)}
+              prefixed={false}
+              className="hex-input__field"
+            />
+          </label>
+        </div>
+      </div>
+
+      <div className="sky-presets-section">
+        <div className="sky-presets-section__heading">Presets</div>
         <div className="presets">
           {PRESETS.map((p) => (
             <button

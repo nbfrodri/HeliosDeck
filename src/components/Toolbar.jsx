@@ -8,6 +8,7 @@ import {
   IconPalette,
   IconTrash
 } from '@tabler/icons-react';
+import { Link } from 'react-router-dom';
 import { useDeckStore } from '../store/useDeckStore.js';
 import { useSettingsStore } from '../store/useSettingsStore.js';
 import { Brand } from './Brand.jsx';
@@ -51,7 +52,9 @@ export function Toolbar() {
   return (
     <>
       <header className="toolbar">
-        <Brand />
+        <Link to="/" className="toolbar__brand-link" aria-label="Home">
+          <Brand />
+        </Link>
         <div className="toolbar__divider" />
         <button
           ref={locationBtnRef}
