@@ -17,7 +17,8 @@ export const defaultSettings = {
   cellSize: 88,
   gap: 18,
   theme: 'dark',
-  gradientStops: DEFAULT_GRADIENT
+  gradientStops: DEFAULT_GRADIENT,
+  skyMode: 'static'
 };
 
 export const defaultDeck = {

@@ -1,5 +1,6 @@
 import { useSettingsStore } from '../store/useSettingsStore.js';
 import { DEFAULT_GRADIENT } from '../store/defaults.js';
+import { SkyFluid } from './SkyFluid.jsx';
 
 function buildGradient(stops) {
   const safe = (stops && stops.length === 5) ? stops : DEFAULT_GRADIENT;
@@ -10,6 +11,12 @@ function buildGradient(stops) {
 
 export function Sky() {
   const stops = useSettingsStore((s) => s.gradientStops);
+  const skyMode = useSettingsStore((s) => s.skyMode);
+
+  if (skyMode === 'fluid') {
+    return <SkyFluid />;
+  }
+
   const style = { background: buildGradient(stops) };
   return (
     <div className="sky" aria-hidden style={style}>

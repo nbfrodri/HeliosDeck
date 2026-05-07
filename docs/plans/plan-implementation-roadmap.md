@@ -2,6 +2,29 @@
 
 > Resumen accionable de [`geophysical-aggregator-project.md`](../geophysical-aggregator-project.md) convertido en hoja de ruta por fases. Cada fase termina en un checkpoint **STOP** para que tú hagas `git commit`, `git push` y test manual antes de pasar a la siguiente.
 
+## Estado de las fases
+
+| Fase | Tema | Estado |
+|---|---|---|
+| 0 | Baseline + carpetas docs | ✅ Hecho |
+| 1 | React Router + páginas | ✅ Hecho |
+| 2 | Auth dummyjson | ✅ Hecho |
+| 3 | USGS Earthquakes + React Query | ✅ Hecho |
+| 4 | Open-Meteo en React Query + mapa Leaflet | ⏳ Pendiente |
+| 5 | i18n bilingüe (en/es) | ⏳ Pendiente |
+| 6 | README + docs/reports + AI disclosure | ⏳ Pendiente |
+| 7 | Deploy público | ✅ Hecho |
+
+### Extras hechos fuera del plan original
+- **Login**: botón "Continue as demo user" para evitar el aviso de password filtrado de Chrome al usar las credenciales públicas de dummyjson.
+- **Sky**: modo **Fluid · animated** con linear-gradient vertical scrolleando en bucle (toggle en el modal del cielo, persistido).
+- **Polish UI**: badges de magnitud rediseñados, indicator pill deslizante en los tabs de Earthquakes y de Sky mode, color picker custom con `react-colorful`.
+
+### Pendiente urgente para la rúbrica
+- Migrar `WeatherWidget` de `usePolling` a `useQuery` (sube React Query a Excellent y aporta una segunda `useQuery` con cache key dependiente de `location.lat/lon`).
+- Implementar i18n (Fase 5) — actualmente 0% de ese criterio.
+- Crear `README.md` con todas las secciones del template (Fase 6) — actualmente no existe el archivo.
+
 ## Decisiones tomadas
 
 - **Track:** A (Declarative SPA — `BrowserRouter`, JWT en `localStorage`, React Query como única capa de datos, i18n cliente).

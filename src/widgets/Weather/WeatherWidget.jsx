@@ -9,9 +9,8 @@ import {
   IconSunrise,
   IconSunset
 } from '@tabler/icons-react';
-import { usePolling } from '../../hooks/usePolling.js';
+import { useWeather } from '../../hooks/useWeather.js';
 import {
-  fetchWeather,
   weatherCodeToIcon,
   weatherCodeToLabel,
   weatherCodeToColor
@@ -46,11 +45,7 @@ function Stat({ Icon, label, value }) {
 }
 
 export function WeatherWidget({ location }) {
-  const { data, loading, error } = usePolling(
-    () => (location ? fetchWeather(location) : Promise.resolve(null)),
-    10 * 60 * 1000,
-    [location?.lat, location?.lon]
-  );
+  const { data, isLoading, isError } = useWeather(location);
 
   if (!location) {
     return (
@@ -60,8 +55,8 @@ export function WeatherWidget({ location }) {
       </div>
     );
   }
-  if (loading && !data) return <div className="empty">Cargando…</div>;
-  if (error && !data) return <div className="empty">No se pudo cargar el tiempo.</div>;
+  if (isLoading && !data) return <div className="empty">Cargando…</div>;
+  if (isError && !data) return <div className="empty">No se pudo cargar el tiempo.</div>;
   if (!data) return null;
 
   const cur = data.current;

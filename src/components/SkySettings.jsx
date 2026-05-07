@@ -38,12 +38,15 @@ function previewStyle(stops) {
 
 export function SkySettings({ open, onClose }) {
   const stops = useSettingsStore((s) => s.gradientStops) ?? DEFAULT_GRADIENT;
+  const skyMode = useSettingsStore((s) => s.skyMode) ?? 'static';
   const setStop = useSettingsStore((s) => s.setGradientStop);
   const setStops = useSettingsStore((s) => s.setGradientStops);
+  const setSkyMode = useSettingsStore((s) => s.setSkyMode);
   const reset = useSettingsStore((s) => s.resetGradient);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const activeColor = stops[activeIndex] ?? '#000000';
+  const modeIdx = skyMode === 'fluid' ? 1 : 0;
 
   return (
     <Modal
@@ -63,6 +66,33 @@ export function SkySettings({ open, onClose }) {
         </>
       }
     >
+      <div
+        className="sky-mode-toggle"
+        role="tablist"
+        aria-label="Sky mode"
+        style={{ '--idx': modeIdx, '--tab-count': 2 }}
+      >
+        <span className="sky-mode-toggle__indicator" aria-hidden />
+        <button
+          type="button"
+          role="tab"
+          aria-selected={skyMode === 'static'}
+          className={`sky-mode-toggle__btn${skyMode === 'static' ? ' sky-mode-toggle__btn--active' : ''}`}
+          onClick={() => setSkyMode('static')}
+        >
+          Static gradient
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={skyMode === 'fluid'}
+          className={`sky-mode-toggle__btn${skyMode === 'fluid' ? ' sky-mode-toggle__btn--active' : ''}`}
+          onClick={() => setSkyMode('fluid')}
+        >
+          Fluid · animated
+        </button>
+      </div>
+
       <div className="sky-grid">
         <div className="sky-preview" style={previewStyle(stops)} aria-hidden />
         <div className="sky-stops">

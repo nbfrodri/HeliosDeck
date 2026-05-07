@@ -19,6 +19,8 @@ export const useSettingsStore = create(
       setGradientStops: (stops) => set({ gradientStops: stops }),
       resetGradient: () => set({ gradientStops: DEFAULT_GRADIENT }),
 
+      setSkyMode: (mode) => set({ skyMode: mode === 'fluid' ? 'fluid' : 'static' }),
+
       requestGeolocation: async () => {
         if (!('geolocation' in navigator)) {
           throw new Error('Geolocalización no soportada');

@@ -20,6 +20,8 @@ export function NavBar() {
       </Link>
       <div className="navbar__links">
         <NavLink to="/dashboard" className={linkClass}>Dashboard</NavLink>
+        <NavLink to="/earthquakes" className={linkClass}>Earthquakes</NavLink>
+        <NavLink to="/map" className={linkClass}>Map</NavLink>
         {authed ? (
           <UserMenu />
         ) : (

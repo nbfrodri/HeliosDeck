@@ -8,7 +8,7 @@ import {
   IconPalette,
   IconTrash
 } from '@tabler/icons-react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useDeckStore } from '../store/useDeckStore.js';
 import { useSettingsStore } from '../store/useSettingsStore.js';
 import { Brand } from './Brand.jsx';
@@ -56,6 +56,12 @@ export function Toolbar() {
         <Link to="/" className="toolbar__brand-link" aria-label="Home">
           <Brand />
         </Link>
+        <NavLink to="/earthquakes" className="toolbar__nav-link">
+          Earthquakes
+        </NavLink>
+        <NavLink to="/map" className="toolbar__nav-link">
+          Map
+        </NavLink>
         <div className="toolbar__divider" />
         <button
           ref={locationBtnRef}

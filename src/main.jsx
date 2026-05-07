@@ -6,6 +6,7 @@ import App from './App.jsx';
 import { AuthProvider } from './contexts/AuthContext.jsx';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
+import 'leaflet/dist/leaflet.css';
 import './styles/global.css';
 
 const queryClient = new QueryClient({
