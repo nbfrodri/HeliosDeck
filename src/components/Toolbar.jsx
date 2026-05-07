@@ -15,6 +15,7 @@ import { Brand } from './Brand.jsx';
 import { LocationSearch } from './LocationSearch.jsx';
 import { SkySettings } from './SkySettings.jsx';
 import { ConfirmDialog } from './ConfirmDialog.jsx';
+import { UserMenu } from './UserMenu.jsx';
 
 export function Toolbar() {
   const editMode = useDeckStore((s) => s.editMode);
@@ -94,6 +95,8 @@ export function Toolbar() {
             <span>Reset</span>
           </button>
         )}
+        <div className="toolbar__divider" />
+        <UserMenu />
       </header>
 
       <LocationSearch
