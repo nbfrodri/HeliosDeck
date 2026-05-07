@@ -1,6 +1,9 @@
+import { lazy, Suspense } from 'react';
 import { useSettingsStore } from '../store/useSettingsStore.js';
 import { DEFAULT_GRADIENT } from '../store/defaults.js';
-import { SkyFluid } from './SkyFluid.jsx';
+import { SkyFluidErrorBoundary } from './SkyFluidErrorBoundary.jsx';
+
+const SkyFluidShader = lazy(() => import('./SkyFluidShader.jsx'));
 
 function buildGradient(stops) {
   const safe = (stops && stops.length === 5) ? stops : DEFAULT_GRADIENT;
@@ -9,14 +12,7 @@ function buildGradient(stops) {
   return `linear-gradient(180deg, ${parts.join(', ')})`;
 }
 
-export function Sky() {
-  const stops = useSettingsStore((s) => s.gradientStops);
-  const skyMode = useSettingsStore((s) => s.skyMode);
-
-  if (skyMode === 'fluid') {
-    return <SkyFluid />;
-  }
-
+function StaticSky({ stops }) {
   const style = { background: buildGradient(stops) };
   return (
     <div className="sky" aria-hidden style={style}>
@@ -27,4 +23,21 @@ export function Sky() {
       <div className="grain" />
     </div>
   );
+}
+
+export function Sky() {
+  const stops = useSettingsStore((s) => s.gradientStops);
+  const skyMode = useSettingsStore((s) => s.skyMode);
+
+  if (skyMode === 'fluid') {
+    return (
+      <SkyFluidErrorBoundary fallback={<StaticSky stops={stops} />}>
+        <Suspense fallback={<StaticSky stops={stops} />}>
+          <SkyFluidShader />
+        </Suspense>
+      </SkyFluidErrorBoundary>
+    );
+  }
+
+  return <StaticSky stops={stops} />;
 }

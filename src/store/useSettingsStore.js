@@ -20,6 +20,10 @@ export const useSettingsStore = create(
       resetGradient: () => set({ gradientStops: DEFAULT_GRADIENT }),
 
       setSkyMode: (mode) => set({ skyMode: mode === 'fluid' ? 'fluid' : 'static' }),
+      setSkyFluidPreset: (preset) => set({ skyFluidPreset: preset }),
+      setSkyFluidCustom: (patch) => set({
+        skyFluidCustom: { ...(get().skyFluidCustom ?? {}), ...patch }
+      }),
 
       requestGeolocation: async () => {
         if (!('geolocation' in navigator)) {

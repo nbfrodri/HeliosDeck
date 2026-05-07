@@ -18,7 +18,15 @@ export const defaultSettings = {
   gap: 18,
   theme: 'dark',
   gradientStops: DEFAULT_GRADIENT,
-  skyMode: 'static'
+  skyMode: 'static',
+  skyFluidPreset: 'liquid-wave',
+  skyFluidCustom: {
+    uSpeed: 0.18,
+    uStrength: 3.4,
+    uFrequency: 5.5,
+    uDensity: 1.4,
+    brightness: 1.1
+  }
 };
 
 export const defaultDeck = {
