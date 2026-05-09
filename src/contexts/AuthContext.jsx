@@ -33,6 +33,7 @@ function pickProfile(payload) {
     firstName: payload.firstName,
     lastName: payload.lastName,
     image: payload.image,
+    role: payload.role,
   };
 }
 

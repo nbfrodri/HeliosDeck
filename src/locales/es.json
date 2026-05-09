@@ -3,6 +3,7 @@
     "dashboard": "Dashboard",
     "earthquakes": "Terremotos",
     "map": "Mapa",
+    "admin": "Admin",
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión"
   },
@@ -55,6 +56,32 @@
       "dayAgo": "hace {n}d"
     },
     "chartTooltipUnit": "eventos"
+  },
+  "admin": {
+    "title": "Administración",
+    "subtitle": "Mostrando {shown} de {total} usuarios de dummyjson",
+    "loading": "Cargando usuarios…",
+    "loadFailed": "Fallo al cargar: {error}",
+    "unknownError": "error desconocido",
+    "refreshing": "actualizando…",
+    "byRole": "Por rol",
+    "users": "Usuarios",
+    "empty": "Sin usuarios.",
+    "col": {
+      "user": "Usuario",
+      "email": "Email",
+      "role": "Rol"
+    },
+    "role": {
+      "admin": "Admin",
+      "moderator": "Moderador",
+      "user": "Usuario"
+    },
+    "forbidden": {
+      "title": "Solo administradores",
+      "message": "Tu cuenta no tiene privilegios de administrador (rol actual: {role}).",
+      "back": "Volver al dashboard"
+    }
   },
   "map": {
     "title": "Mapa sísmico + clima",

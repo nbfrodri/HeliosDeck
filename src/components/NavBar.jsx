@@ -10,9 +10,10 @@ const linkClass = ({ isActive }) =>
 export function NavBar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { status } = useAuth();
+  const { status, user } = useAuth();
   const { locale, t } = useTranslation();
   const authed = status === 'authenticated';
+  const isAdmin = authed && user?.role === 'admin';
 
   // hide on dashboard — Toolbar handles chrome there
   const seg = pathname.split('/').filter(Boolean);
@@ -37,6 +38,11 @@ export function NavBar() {
         <NavLink to={`/${locale}/map`} className={linkClass}>
           {t('nav.map')}
         </NavLink>
+        {isAdmin && (
+          <NavLink to={`/${locale}/admin`} className={linkClass}>
+            {t('nav.admin')}
+          </NavLink>
+        )}
 
         <div
           className="lang-switcher"

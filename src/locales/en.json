@@ -3,6 +3,7 @@
     "dashboard": "Dashboard",
     "earthquakes": "Earthquakes",
     "map": "Map",
+    "admin": "Admin",
     "login": "Log in",
     "logout": "Log out"
   },
@@ -55,6 +56,32 @@
       "dayAgo": "{n}d ago"
     },
     "chartTooltipUnit": "events"
+  },
+  "admin": {
+    "title": "Admin",
+    "subtitle": "Showing {shown} of {total} dummyjson users",
+    "loading": "Loading users…",
+    "loadFailed": "Failed to load: {error}",
+    "unknownError": "unknown error",
+    "refreshing": "refreshing…",
+    "byRole": "By role",
+    "users": "Users",
+    "empty": "No users.",
+    "col": {
+      "user": "User",
+      "email": "Email",
+      "role": "Role"
+    },
+    "role": {
+      "admin": "Admin",
+      "moderator": "Moderator",
+      "user": "User"
+    },
+    "forbidden": {
+      "title": "Admins only",
+      "message": "Your account does not have admin privileges (current role: {role}).",
+      "back": "Back to dashboard"
+    }
   },
   "map": {
     "title": "Seismic + weather map",
