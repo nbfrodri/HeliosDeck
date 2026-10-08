@@ -4,6 +4,19 @@
 
 This is the individual final project for the React module of the **Web Atelier** course (UDIT, course 2025-2026). Spec: [Geophysical Aggregator project](https://ruvebal.github.io/web-atelier-udit/lessons/en/react/geophysical-aggregator-project/).
 
+## Preview
+
+![HeliosDeck dashboard with weather, clock, moon phase and sun widgets](docs/screenshots/dashboard.png)
+
+<table>
+  <tr>
+    <td width="50%"><a href="docs/screenshots/earthquakes.png"><img src="docs/screenshots/earthquakes.png" alt="Earthquake magnitude distribution, event statistics and USGS event list" /></a><br /><strong>Earthquake explorer</strong><br />Filter live USGS events by magnitude and time window.</td>
+    <td width="50%"><a href="docs/screenshots/sky-settings.png"><img src="docs/screenshots/sky-settings.png" alt="Sky customization panel with gradient stops and color presets" /></a><br /><strong>Sky customization</strong><br />Adjust the dashboard background with colors and presets.</td>
+  </tr>
+</table>
+
+Captured from the [live demo](https://helios-deck.vercel.app/) using its public demo account. Weather and earthquake readings reflect the capture time; the widget layout is customizable.
+
 ## Track
 
 - [x] **Track A — Declarative SPA** (`BrowserRouter`, JWT in `localStorage`, React Query as the single data layer, client-side i18n)
